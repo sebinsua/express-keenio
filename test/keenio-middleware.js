@@ -10,6 +10,8 @@ var mockKeenClientModule = {
     return {
       makeRequest: undefined,
       addEvent: function (eventCollection, event, callback) {
+        // Overriding this method stops the unit tests from hitting keen.io.
+        // Note: a defined this.makeRequest allows us to execute some assertions from the unit tests.
         if (this.makeRequest) {
           this.makeRequest(eventCollection, event, callback);
         }
@@ -19,50 +21,109 @@ var mockKeenClientModule = {
 
 };
 
-var keenioMiddleware = proxyquire('../lib/keenio-middleware', { "keen.io": mockKeenClientModule });
-
 // @todo: Update the README.md.
 // @todo: Before I release, take a look at some node.js projects I know about and see how it would be used with them.
-//        Also take a look at something like this for ideas on interface: https://segment.io/libraries/node
 //        Are we really dealing with events? Yes.
 //        Should event be human-readable? Yes. Thus tagged.
 //        Were properties a intent-react generalisation? Yes.
 
 describe("keenioMiddleware", function () {
   
+  var keenioMiddleware;
+  beforeEach(function () {
+    keenioMiddleware = proxyquire('../lib/keenio-middleware', { "keen.io": mockKeenClientModule });
+  });
+
   describe("configure()", function () {
-    // @todo: Look into some way of validating arguments in JavaScript. Nice way of doing so.
 
-    /*
-    it("should error if no configuration is passed in", function () {
-      true.should.be.false;
-    });
+    it("should error if no/bad configuration is passed in", function () {
+      // Test the client configuration.
+      var tests = [
+        {
+          configuration: null,
+          errorMessage: "No options specified for the keen.io middleware."
+        },
+        {
+          configuration: {},
+          errorMessage: "No client options specified for the keen.io middleware."
+        },
+        {
+          configuration: {
+            client: {
+              notProjectId: '<test>',
+              writeKey: '<test>'
+            }
+          },
+          errorMessage: "projectId is missing from the client options passed into the keen.io middleware and was mandatory."
+        },
+        {
+          configuration: {
+            client: {
+              projectId: '<test>',
+              notWriteKey: '<test>'
+            }
+          },
+          errorMessage: "writeKey is missing from the client options passed into the keen.io middleware and was mandatory."
+        }
+      ];
 
-    it("should error if bad configuration is passed in", function () {
-      // @todo: How to configure? Can I have modes and request-responses?
-      true.should.be.false;
+      tests.forEach(function (test) {
+        (function () {
+          var configure = keenioMiddleware.configure.bind(keenioMiddleware);
+          configure(test.configuration);
+        }).should.throw(Error, test.errorMessage);
+      });
     });
 
     it("should return a valid middleware if handle() is executed after valid configuration", function () {
       // @todo: How to configure? Can I have modes and request-responses?
       // @todo: Way of tagging event collection + and replacing event collection name with better name.
-      true.should.be.false;
-    });
+      var configuration = {
+        client: {
+          projectId: '<test>',
+          writeKey: '<test>'
+        }
+      };
 
+      var configure = keenioMiddleware.configure.bind(keenioMiddleware);
+      (function () {
+        configure(configuration);
+      }).should.not.throw(Error);
+      keenioMiddleware.options.should.eql(configuration);
+
+      var handle = keenioMiddleware.handle.bind(keenioMiddleware);
+      handle.should.not.throw(Error, "Middleware must be configured before use.");
+    });
+    
     it("should return a valid middleware if handleAll() is executed after valid configuration", function () {
       // @todo: How to configure? Can I have modes and request-responses?
       // @todo: Way of tagging event collection + and replacing event collection name with better name.
-      true.should.be.false;
+      var configuration = {
+        client: {
+          projectId: '<test>',
+          writeKey: '<test>'
+        }
+      };
+
+      var configure = keenioMiddleware.configure.bind(keenioMiddleware);
+      (function () {
+        configure(configuration);
+      }).should.not.throw(Error);
+      keenioMiddleware.options.should.eql(configuration);
+
+      var handleAll = keenioMiddleware.handleAll.bind(keenioMiddleware);
+      handleAll.should.not.throw(Error, "Middleware must be configured before use.");
     });
 
     it("should error if handle() is executed before calling configure()", function () {
-      true.should.be.false;
+      var handle = keenioMiddleware.handle.bind(keenioMiddleware);
+      handle.should.throw(Error, "Middleware must be configured before use.");
     });
 
     it("should error if handleAll() is executed before calling configure()", function () {
-      true.should.be.false;
+      var handleAll = keenioMiddleware.handleAll.bind(keenioMiddleware);
+      handleAll.should.throw(Error, "Middleware must be configured before use.");
     });
-    */
 
   });
 
@@ -87,8 +148,10 @@ describe("keenioMiddleware", function () {
 
     beforeEach(function () {
       keenioMiddleware.configure({
-        projectId: "<fake-project-id>",
-        writeKey: "<fake-write-key>"
+        client: {
+          projectId: "<fake-project-id>",
+          writeKey: "<fake-write-key>"
+        }
       });
 
       app = express();
