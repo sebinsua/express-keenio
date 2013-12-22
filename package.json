@@ -4,7 +4,7 @@
   "homepage"        : "https://github.com/sebinsua/express-keenio",
   "keywords"        : [
     "middleware",
-    "keen",
+    "keen.io",
     "analytics"
   ],
   "author"          : "Seb Insua <me@sebinsua.com>",
@@ -20,7 +20,9 @@
   "devDependencies" : {
     "express": "~3.4.7",
     "supertest": "0.8.2",
+    "proxyquire": "0.5.2",
     "mocha": "*",
+    "sinon": "1.7.3",
     "chai": "*"
   },
   "engines": {
