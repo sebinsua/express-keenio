@@ -94,7 +94,7 @@ describe("keenioMiddleware", function () {
       app = express();
       app.configure(function () {
         app.use(express.bodyParser());
-        app.use(keenioMiddleware.handle());
+        app.use(keenioMiddleware.handleAll());
         app.use(app.router);
       });
 
@@ -170,7 +170,7 @@ describe("keenioMiddleware", function () {
 
   });
 
-  describe("handle() - specific route", function () {
+  describe("handle(eventCollection, eventTag) - specific route", function () {
     var app;
 
     beforeEach(function () {
