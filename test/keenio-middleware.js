@@ -173,7 +173,10 @@ describe("keenioMiddleware", function () {
 
       app = express();
       app.configure(function () {
-        app.use(express.bodyParser());
+        app.use(express.json());
+        app.use(express.urlencoded()); // note: these two replace: app.use(express.bodyParser());
+                                       // see:  http://stackoverflow.com/questions/19581146/how-to-get-rid-of-connect-3-0-deprecation-alert
+
         app.use(keenioMiddleware.handleAll());
         app.use(app.router);
       });
@@ -266,7 +269,10 @@ describe("keenioMiddleware", function () {
 
       app = express();
       app.configure(function () {
-        app.use(express.bodyParser());
+        app.use(express.json());
+        app.use(express.urlencoded()); // note: these two replace: app.use(express.bodyParser());
+                                       // see:  http://stackoverflow.com/questions/19581146/how-to-get-rid-of-connect-3-0-deprecation-alert
+        
         app.use(app.router);
       });
     });
