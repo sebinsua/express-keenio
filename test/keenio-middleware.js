@@ -77,7 +77,6 @@ describe("keenioMiddleware", function () {
 
     it("should return a valid middleware if handle() is executed after valid configuration", function () {
       // @todo: How to configure? Can I have modes and request-responses?
-      // @todo: Way of tagging event collection + and replacing event collection name with better name.
       var configuration = {
         client: {
           projectId: '<test>',
@@ -97,7 +96,6 @@ describe("keenioMiddleware", function () {
     
     it("should return a valid middleware if handleAll() is executed after valid configuration", function () {
       // @todo: How to configure? Can I have modes and request-responses?
-      // @todo: Way of tagging event collection + and replacing event collection name with better name.
       var configuration = {
         client: {
           projectId: '<test>',
@@ -127,19 +125,38 @@ describe("keenioMiddleware", function () {
 
   });
 
-  describe("identify()", function () {
-    // @todo: Describe identify. Can I detect which user is logged in (and store this in a key-value)?
-    //        Use the word 'track' in some places.
+  describe("_identify()", function () {
 
-    /*
     it("should be able to get out data from req.user if this has been set", function () {
+      var req = {
+        user: {
+          id: 'abc123'
+        }
+      };
 
+      keenioMiddleware._identify(req).should.eql({ id: 'abc123' });
     });
 
-    it("should be able to fallback to getting data from a session/header variable if user was not set", function () {
+    it("should be able to fallback to getting data from a session variable if user was not set", function () {
+      var req = {
+        session: {
+          id: 'abc123'
+        }
+      };
 
+      keenioMiddleware._identify(req).should.eql({ id: 'abc123' });
     });
-    */
+
+    it("should be able to fallback to getting data from a header variable if user was not set", function () {
+      var req = {
+        headers: {
+          'Session-Id': '<fake-session>',
+          'User-Agent': 'libwww/4.1'
+        }
+      };
+
+      keenioMiddleware._identify(req).should.eql({ 'Session-Id': '<fake-session>', 'User-Agent': 'libwww/4.1' });
+    });
 
   });
 
@@ -167,10 +184,9 @@ describe("keenioMiddleware", function () {
       });
     });
 
-    // @todo: Sensible defaults for names, params, queries, key-values, etc.
-
     it("should send valid event data to keen.io on making a json body request", function (done) {
       keenioMiddleware.keenClient.makeRequest = function testRequestData (eventCollection, event) {
+        // @todo: AssertionErrors aren't causing anything to happen due to supertest.
         eventCollection.should.equal("api--test");
         event.should.have.property('intention');
         event.intention.should.eql({
@@ -180,6 +196,7 @@ describe("keenioMiddleware", function () {
             user: "seb"
           }
         });
+        event.reaction.should.eql({ user: "seb" });
       };
 
       request(app).post('/test')
@@ -187,6 +204,9 @@ describe("keenioMiddleware", function () {
                   .expect('{\n  "user": "seb"\n}', done);
     });
     
+    // @todo: Sensible defaults for names, params, queries, key-values, etc.
+    // @todo: Way of tagging event collection + and replacing event collection name with better name.
+
     /*  
     it("should send valid event data to keen.io on making a params request", function (done) {
       true.should.be.false;
@@ -238,8 +258,10 @@ describe("keenioMiddleware", function () {
 
     beforeEach(function () {
       keenioMiddleware.configure({
-        projectId: "<fake-project-id>",
-        writeKey: "<fake-write-key>"
+        client: {
+          projectId: "<fake-project-id>",
+          writeKey: "<fake-write-key>"
+        }
       });
 
       app = express();
@@ -247,19 +269,18 @@ describe("keenioMiddleware", function () {
         app.use(express.bodyParser());
         app.use(app.router);
       });
-
-      app.post('/test', function (req, res) {
-        var requestBody = req.body;
-        res.send(requestBody);
-      });
     });
 
-    // @todo: Decorator-style version should be able to be used instead of the general middleware version.
-
-    /*
     it("should send valid event data to keen.io on making a json body request", function (done) {
+      app.post('/test', keenioMiddleware.handle('eventCollectionName', "Posted to test"), function (req, res) {
+        var requestBody = req.body;
+        res.send(requestBody);
+      });      
+
+      // @todo: AssertionErrors aren't causing anything to happen when run inside supertest.
       keenioMiddleware.keenClient.makeRequest = function testRequestData (eventCollection, event) {
-        eventCollection.should.equal("api--test");
+        eventCollection.should.equal("eventCollectionName");
+        event.tag.should.equal("Posted to test");
         event.should.have.property('intention');
         event.intention.should.eql({
           path: '/test',
@@ -275,6 +296,7 @@ describe("keenioMiddleware", function () {
                   .expect('{\n  "user": "seb"\n}', done);
     });
     
+    /*
     it("should send valid event data to keen.io on making a params request", function (done) {
       true.should.be.false;
     });
