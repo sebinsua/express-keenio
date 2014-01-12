@@ -14,9 +14,7 @@ var mockKeenClientModule = {
 
 };
 
-// Stop sending identity data by default.
 // Create configuration format to mandate indentity format.
-// Work out way of naming events automatically.
 // Create way of specifying event list from route names.
 // Create way of specifiying eventCollectionNames and tags for this list.
 // Create way to fix these event identity things - they're too all-encompassing. Format of event should be changeable.
@@ -199,7 +197,7 @@ describe("keenioMiddleware", function () {
                     eventCollection = callArgs[0];
                     event = callArgs[1];
 
-                    eventCollection.should.equal("api--test");
+                    eventCollection.should.equal("post-test");
                     event.should.have.property('intention');
                     event.intention.should.eql({
                       path: '/test',
@@ -228,7 +226,7 @@ describe("keenioMiddleware", function () {
                     eventCollection = callArgs[0];
                     event = callArgs[1];
 
-                    eventCollection.should.equal("api--params/5/7/8");
+                    eventCollection.should.equal("post-params-userId-someParam-someOtherParam");
                     event.should.have.property('intention');
                     event.intention.should.eql({
                       path: '/params/5/7/8',
@@ -260,7 +258,7 @@ describe("keenioMiddleware", function () {
                     eventCollection = callArgs[0];
                     event = callArgs[1];
 
-                    eventCollection.should.equal("api--test");
+                    eventCollection.should.equal("post-test");
                     event.should.have.property('intention');
                     event.intention.should.eql({
                       path: '/test',
@@ -435,7 +433,7 @@ describe("keenioMiddleware", function () {
                     eventCollection = callArgs[0];
                     event = callArgs[1];                    
 
-                    eventCollection.should.equal("api--params/5/7/8");
+                    eventCollection.should.equal("post-params-userId-someParam-someOtherParam");
                     event.should.have.property('intention');
                     event.intention.should.eql({
                       path: '/params/5/7/8',
@@ -471,7 +469,7 @@ describe("keenioMiddleware", function () {
                     eventCollection = callArgs[0];
                     event = callArgs[1];                    
 
-                    eventCollection.should.equal("api--test");
+                    eventCollection.should.equal("get-test");
                     event.should.have.property('intention');
                     event.intention.should.eql({
                       path: '/test',
