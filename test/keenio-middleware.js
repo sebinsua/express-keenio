@@ -14,16 +14,16 @@ var mockKeenClientModule = {
 
 };
 
-// @todo: Fix these event identity things - they're too all-encompassing.
-// @todo: How to configure? Can I have modes and request-responses? A new config format.
-// @todo: Handle non-json response.
-// @todo: Restructure the format of intention that we send to keen.io.
+// Stop sending identity data by default.
+// Create configuration format to mandate indentity format.
+// Work out way of naming events automatically.
+// Create way of specifying event list from route names.
+// Create way of specifiying eventCollectionNames and tags for this list.
+// Create way to fix these event identity things - they're too all-encompassing. Format of event should be changeable.
+// Handle non-json response - look at the status code of the response, but make it defineable.
 
 // @todo: Update the README.md.
 // @todo: Before I release, take a look at some node.js projects I know about and see how it would be used with them.
-//        Are we really dealing with events? Yes.
-//        Should event be human-readable? Yes. Thus tagged.
-//        Were properties a intent-react generalisation? Yes - but the meaning might not be clear.
 
 describe("keenioMiddleware", function () {
   
@@ -321,11 +321,24 @@ describe("keenioMiddleware", function () {
                   });
     });
 
-    /*
+
     it("should not send identity data to keen.io by default", function (done) {
-      true.should.be.false;
+      var testRequest = sinon.spy();
+      keenioMiddleware.keenClient.addEvent = testRequest;
+
+      request(app).post('/test')
+                  .send({ "user": "seb" })
+                  .expect('{\n  "user": "seb"\n}', function () {
+                    var callArgs, event;
+                    callArgs = testRequest.getCall(0).args;
+                    event = callArgs[1];                    
+
+                    should.not.exist(event.identity);
+                    done();
+                  });
     });
 
+    /*
     it("should send specific identity data to keen.io if the configuration mandated this", function (done) {
       true.should.be.false;
     });
