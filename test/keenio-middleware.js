@@ -14,11 +14,11 @@ var mockKeenClientModule = {
 
 };
 
+// Create way to fix these event identity things - they're too all-encompassing. Format of event should be changeable.
+
 // Create configuration format to mandate indentity format.
 // Create way of specifying event list from route names.
 // Create way of specifiying eventCollectionNames and tags for this list.
-// Create way to fix these event identity things - they're too all-encompassing. Format of event should be changeable.
-// Handle non-json response - look at the status code of the response, but make it defineable.
 
 // @todo: Update the README.md.
 // @todo: Before I release, take a look at some node.js projects I know about and see how it would be used with them.
@@ -115,6 +115,29 @@ describe("keenioMiddleware", function () {
     it("should error if handleAll() is executed before calling configure()", function () {
       var handleAll = keenioMiddleware.handleAll.bind(keenioMiddleware);
       handleAll.should.throw(Error, "Middleware must be configured before use.");
+    });
+
+  });
+
+  describe("_getResponseData()", function () {
+    it("should support a single numeric argument", function () {
+      keenioMiddleware._getResponseData([ 201 ]).should.eql({ status: 201 });
+    });
+
+    it("should support a single string argument", function () {
+      keenioMiddleware._getResponseData([ 'hello world' ]).should.eql({ status: 200, reaction: 'hello world' });
+    });
+
+    it("should support a single json string argument", function () {
+      keenioMiddleware._getResponseData([ '{ "special": "text" }' ]).should.eql({ status: 200, reaction: { special: "text" } });
+    });
+
+    it("should support a single json object argument", function () {
+      keenioMiddleware._getResponseData([ { "special": "text" } ]).should.eql({ status: 200, reaction: { special: "text" } });
+    });
+
+    it("should support two arguments", function () {
+      keenioMiddleware._getResponseData([ 404, { "error": "message" } ]).should.eql({ status: 404, reaction: { error: "message" } });
     });
 
   });
