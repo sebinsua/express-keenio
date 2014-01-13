@@ -14,14 +14,45 @@ var mockKeenClientModule = {
 
 };
 
-// Create way to fix these event identity things - they're too all-encompassing. Format of event should be changeable.
+// Are you solving your core problem? YES.
 
-// Create configuration format to mandate indentity format.
-// Create way of specifying event list from route names.
-// Create way of specifiying eventCollectionNames and tags for this list.
+// Have you got sensible coarse defaults?
+// Easy to reject routes?
+
+// @todo: Come up with a configuration format.
+/*
+{
+  client: {
+    notProjectId: '<test>',
+    writeKey: '<test>'
+  },
+  defaults: {
+    generateIdentity: function (req) {},
+    generateEventCollectionName: function (route) {},
+    // new...
+    parseRequestBody: function (body) {},
+    parseResponseBody: function (body) {}
+  },
+  routes: [
+    { method: 'GET', route: 'route-name-1', eventCollectionName: '', tag: '' },
+    { method: 'POST', route: 'route-name-2', eventCollectionName: '', tag: '' }
+  ],
+  excludeRoutes: [
+    'route-name'
+  ],
+}
+*/
+// @todo: Some way of parsing the request and response body differently.
+
+// @todo: Create way of specifying event list from route names.
+// @todo: Create way of specifiying eventCollectionNames and tags for this list.
+// @todo: Find out why the is.json thing has to be used... Can we avoid?
+
+// --- 
 
 // @todo: Update the README.md.
 // @todo: Before I release, take a look at some node.js projects I know about and see how it would be used with them.
+// @todo: Abstract: Handler, Identify, Request, Response parser.
 
 describe("keenioMiddleware", function () {
   
@@ -142,7 +173,18 @@ describe("keenioMiddleware", function () {
 
   });
 
-  describe("_identify()", function () {
+  describe("_sanitizeBody()", function () {
+    it("should wipe out the value inside a 'password' key", function () {
+      var inputData = {
+        password: 'abc123'
+      }, outputData = {
+        password: '[redacted]'
+      };
+      keenioMiddleware._sanitizeBody(inputData).should.eql(outputData);
+    });
+  });
+
+  describe("identify()", function () {
 
     it("should be able to get out data from req.user if this has been set", function () {
       var req = {
@@ -151,7 +193,7 @@ describe("keenioMiddleware", function () {
         }
       };
 
-      keenioMiddleware._identify(req).should.eql({ id: 'abc123' });
+      keenioMiddleware.identify(req).should.eql({ id: 'abc123' });
     });
 
     it("should be able to fallback to getting data from a session variable if user was not set", function () {
@@ -161,10 +203,10 @@ describe("keenioMiddleware", function () {
         }
       };
 
-      keenioMiddleware._identify(req).should.eql({ id: 'abc123' });
+      keenioMiddleware.identify(req).should.eql({ id: 'abc123' });
     });
 
-    it("should be able to fallback to getting data from a header variable if user was not set", function () {
+    it("should be able to fallback to empty data even if header data was sent", function () {
       var req = {
         headers: {
           'Session-Id': '<fake-session>',
@@ -172,7 +214,27 @@ describe("keenioMiddleware", function () {
         }
       };
 
-      keenioMiddleware._identify(req).should.eql({ 'Session-Id': '<fake-session>', 'User-Agent': 'libwww/4.1' });
+      keenioMiddleware.identify(req).should.eql({});
+    });
+
+    it("should be able to have the identifier overridden to store any kind of identity", function () {
+      var req = {
+        headers: {
+          'Client-Api-Key': 'abc123',
+          'User-Agent': 'libwww/4.1'
+        }
+      };
+
+      keenioMiddleware.options = {
+        defaults: {
+          generateIdentity: function (req) {
+            return req.headers['Client-Api-Key'];
+          }
+        }
+      };
+
+      keenioMiddleware.identify(req).should.eql('abc123');
+      keenioMiddleware.options.defaults.identifier = null;
     });
 
   });
