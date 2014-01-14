@@ -14,12 +14,6 @@ var mockKeenClientModule = {
 
 };
 
-// @todo: Find out why the is.json thing has to be used... Can we avoid?
-// @todo: Abstract: Handler, Identify, Request, Response parser.
-// @todo: Write some code to ensure that handleAll config gets overridden by individual middleware functions and not the other way around.
-
-// --- 
-
 // @todo: Update the README.md.
 /*
 {
@@ -43,8 +37,13 @@ var mockKeenClientModule = {
   ],
 }
 */
-// @todo: Before I release, take a look at some node.js projects I know about and see how it would be used with them.
-
+// @todo: Create a small node.js project that uses this to help manually sanity test.
+// @todo: Find out what keen.io does if it receives an array...?!
+// ---
+// REFACTOR:
+// @todo: Find out why the is("json") thing has to be used... Can we do this at another point?
+// @todo: Write some code to ensure that handleAll config gets overridden by individual middleware functions and not the other way around.
+// @todo: Abstract: Handler, Identify, Request, Response parser.
 
 describe("keenioMiddleware", function () {
   
