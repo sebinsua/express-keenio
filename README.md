@@ -3,7 +3,7 @@ express-keenio
 
 [![Build Status](https://travis-ci.org/sebinsua/express-keenio.png)](https://travis-ci.org/sebinsua/express-keenio)
 
-Install Keen.IO analytics support into your Node.JS app in just a few seconds.
+Install Keen.IO analytics support into your Node.JS app in mere seconds.
 
 Setup
 -----
