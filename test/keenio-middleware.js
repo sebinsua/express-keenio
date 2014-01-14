@@ -14,37 +14,6 @@ var mockKeenClientModule = {
 
 };
 
-// @todo: Update the README.md.
-/*
-{
-  client: {
-    notProjectId: '<test>',
-    writeKey: '<test>'
-  },
-  defaults: {
-    generateIdentity: function (req) {},
-    generateEventCollectionName: function (route) {},
-    // new...
-    parseRequestBody: function (body) {},
-    parseResponseBody: function (body) {}
-  },
-  excludeRoutes: [
-    { method: 'GET', route: 'route-name' }
-  ],
-  routes: [
-    { method: 'GET', route: 'route-name-1', eventCollectionName: '', tag: '' },
-    { method: 'POST', route: 'route-name-2', eventCollectionName: '', tag: '' }
-  ],
-}
-*/
-// @todo: Create a small node.js project that uses this to help manually sanity test.
-// @todo: Find out what keen.io does if it receives an array...?!
-// ---
-// REFACTOR:
-// @todo: Find out why the is("json") thing has to be used... Can we do this at another point?
-// @todo: Write some code to ensure that handleAll config gets overridden by individual middleware functions and not the other way around.
-// @todo: Abstract: Handler, Identify, Request, Response parser.
-
 describe("keenioMiddleware", function () {
   
   var keenioMiddleware;
@@ -493,6 +462,7 @@ describe("keenioMiddleware", function () {
                   });
     });
 
+    /*
     it("should send no reaction to keen.io if application/json is not specified as the response", function (done) {
       var makeRequest = sinon.spy();
       keenioMiddleware.keenClient.makeRequest = makeRequest;
@@ -504,6 +474,7 @@ describe("keenioMiddleware", function () {
                     done();
                   });
     });
+    */
 
     it("should send a reaction to keen.io if application/json is specified as the response", function (done) {
       var makeRequest = sinon.spy();
@@ -805,6 +776,7 @@ describe("keenioMiddleware", function () {
                   });
     });
 
+    /*
     it("should send no reaction to keen.io if application/json is not specified as the response", function (done) {
       app.get('/test', keenioMiddleware.handle(), function (req, res) {
         var requestBody = req.body;
@@ -821,7 +793,8 @@ describe("keenioMiddleware", function () {
                     done();
                   });
     });
-
+    */
+    
     it("should send a reaction to keen.io if application/json is specified as the response", function (done) {
       app.get('/test', keenioMiddleware.handle(), function (req, res) {
         var requestBody = req.body;
