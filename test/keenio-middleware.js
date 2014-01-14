@@ -488,7 +488,7 @@ describe("keenioMiddleware", function () {
                   });
     });
 
-    it("should not send identity data to keen.io by default", function (done) {
+    it("should send empty identity data to keen.io by default", function (done) {
       var testRequest = sinon.spy();
       keenioMiddleware.keenClient.addEvent = testRequest;
 
@@ -499,7 +499,7 @@ describe("keenioMiddleware", function () {
                     callArgs = testRequest.getCall(0).args;
                     event = callArgs[1];                    
 
-                    should.not.exist(event.identity);
+                    event.identity.should.eql({});
                     done();
                   });
     });
@@ -794,7 +794,7 @@ describe("keenioMiddleware", function () {
                   });
     });
     */
-    
+
     it("should send a reaction to keen.io if application/json is specified as the response", function (done) {
       app.get('/test', keenioMiddleware.handle(), function (req, res) {
         var requestBody = req.body;

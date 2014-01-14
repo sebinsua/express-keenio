@@ -1,0 +1,14 @@
+{
+  "name": "example",
+  "version": "0.0.0",
+  "description": "A collection of examples just to real-life integration test the middleware.",
+  "main": "basic-specific-routes.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Seb Insua",
+  "license": "BSD",
+  "dependencies": {
+    "express": "*"
+  }
+}

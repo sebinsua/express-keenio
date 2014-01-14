@@ -1,0 +1,6 @@
+{
+    "client": {
+        "projectId": "<project-id>",
+        "writeKey": "<write-key>"
+    }
+}
