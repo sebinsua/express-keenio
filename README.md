@@ -54,9 +54,9 @@ Easy!
 Configuration
 -------------
 
-Keen.IO Client Configuration
+### Keen.IO Client Configuration
 
-```json
+```javascript
 {
   client: {
     notProjectId: '<test>',
@@ -65,9 +65,9 @@ Keen.IO Client Configuration
 }
 ```
 
-It's possible to override the internal behaviour of the middleware like so:
+### Middleware Overrides
 
-Middleware Overrides
+It's possible to override the internal behaviour of the middleware like so:
 
 ```javascript
 {
@@ -86,7 +86,7 @@ Middleware Overrides
 
 *It's likely however that this might change in future.*
 
-Excluding routes from handleAll()
+### Excluding routes from handleAll()
 
 ```javascript
 {
@@ -100,7 +100,7 @@ Excluding routes from handleAll()
 }
 ```
 
-Defining route configuration for handleAll()
+### Defining route configuration for handleAll()
 
 ```javascript
 {
@@ -114,3 +114,5 @@ Defining route configuration for handleAll()
   ]
 }
 ```
+
+*You must pick either 'routes' or 'excludeRoutes' but not both.*
