@@ -59,7 +59,7 @@ Configuration
 ```javascript
 {
   client: {
-    notProjectId: '<test>',
+    projectId: '<test>',
     writeKey: '<test>'
   }
 }
@@ -72,7 +72,7 @@ It's possible to override the internal behaviour of the middleware like so:
 ```javascript
 {
   client: {
-    notProjectId: '<test>',
+    projectId: '<test>',
     writeKey: '<test>'
   }
   defaults: {
@@ -91,7 +91,7 @@ It's possible to override the internal behaviour of the middleware like so:
 ```javascript
 {
   client: {
-    notProjectId: '<test>',
+    projectId: '<test>',
     writeKey: '<test>'
   }
   excludeRoutes: [
@@ -105,7 +105,7 @@ It's possible to override the internal behaviour of the middleware like so:
 ```javascript
 {
   client: {
-    notProjectId: '<test>',
+    projectId: '<test>',
     writeKey: '<test>'
   }
   routes: [
