@@ -23,13 +23,14 @@
     "proxyquire": "0.5.2",
     "mocha": "*",
     "sinon": "1.7.3",
-    "chai": "*"
+    "chai": "*",
+    "jshint": "latest"
   },
   "engines": {
     "node": "*"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "make test"
   },
   "files" : ["index.js"]
 }
