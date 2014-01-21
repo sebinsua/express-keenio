@@ -3,7 +3,7 @@ express-keenio
 
 [![Build Status](https://travis-ci.org/sebinsua/express-keenio.png)](https://travis-ci.org/sebinsua/express-keenio)
 
-Install Keen.IO analytics support into your Node.JS Express.js app in mere seconds.
+Install Keen.IO analytics support into your Node.JS [Express.js](https://github.com/visionmedia/express) app in mere seconds.
 
 This software is currently in alpha stage - the interfaces may change, the underyling code needs to be refactored and there will likely be lots of bugs.
 
@@ -11,8 +11,17 @@ Premise
 -------
 * Events can be seen as an intention-reaction mapping.
 * Events belong in a collection together when they can be described by similar properties.
-* We should capture almost everything (events, user identifications, repeat visits.)
+* We should capture almost everything (events, environment, user identity and metadata e.g. repeat visits.)
 * Installation should be fast.
+
+Getting Started
+---------------
+
+Install it from the command line with:
+
+```shell
+$ npm install express-keenio
+```
 
 Setup
 -----
@@ -26,6 +35,7 @@ var express = require("express"),
 var app = express();
 
 keenioMiddleware.configure({ client: { projectId: '<test>', writeKey: '<test>'} });
+keenioMiddleware.on('error', console.warn);
 
 app.get('/test', keenioMiddleware.handle("testEventCollection"), function (req, res) {
    // Your code goes here.
@@ -123,3 +133,47 @@ It's possible to override the internal behaviour of the middleware like so:
 ```
 
 *You must pick either 'routes' or 'excludeRoutes' but not both.*
+
+Note
+----
+* There should be no more than 1,000 properties per EventCollection so dynamic naming of properties may be harmful. Responses with these should be switched off if possible.
+
+Tests
+-----
+```shell
+$ npm install --dev
+$ npm test
+```
+
+Contributors
+------------
+* [Seb Insua](http://github.com/sebinsua)
+
+License
+-------
+
+[BSD 2-Clause License](https://github.com/sebinsua/express-keenio/blob/master/LICENSE)
+
+Copyright (c) 2014, Seb Insua
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice, this
+  list of conditions and the following disclaimer in the documentation and/or
+  other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
