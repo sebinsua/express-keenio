@@ -7,6 +7,13 @@ Install Keen.IO analytics support into your Node.JS Express.js app in mere secon
 
 This software is currently in alpha stage - the interfaces may change, the underyling code needs to be refactored and there will likely be lots of bugs.
 
+Premise
+-------
+* Events can be seen as an intention-reaction mapping.
+* Events belong in a collection together when they can be described by similar properties.
+* We should capture almost everything (events, user identifications, repeat visits.)
+* Installation should be fast.
+
 Setup
 -----
 
