@@ -624,7 +624,6 @@ describe("keenioMiddleware", function () {
         });
     });
 
-    /*
     it("should send no reaction to keen.io if application/json is not specified as the response", function (done) {
       var makeRequest = sinon.spy();
       keenioMiddleware.keenClient.makeRequest = makeRequest;
@@ -636,7 +635,6 @@ describe("keenioMiddleware", function () {
                     done();
                   });
     });
-    */
 
     it("should send a reaction to keen.io if application/json is specified as the response", function (done) {
       var makeRequest = sinon.spy();
@@ -975,7 +973,6 @@ describe("keenioMiddleware", function () {
         });
     });
 
-    /*
     it("should send no reaction to keen.io if application/json is not specified as the response", function (done) {
       app.get('/test', keenioMiddleware.handle(), function (req, res) {
         var requestBody = req.body;
@@ -992,7 +989,6 @@ describe("keenioMiddleware", function () {
                     done();
                   });
     });
-    */
 
     it("should send a reaction to keen.io if application/json is specified as the response", function (done) {
       app.get('/test', keenioMiddleware.handle(), function (req, res) {
