@@ -57,8 +57,7 @@ describe("keenioMiddleware", function () {
         (function () {
           var configure = keenioMiddleware.configure.bind(keenioMiddleware);
           configure(test.configuration);
-        }).should.
-        throw (Error, test.errorMessage);
+        }).should.throw(Error, test.errorMessage);
       });
     });
 
@@ -75,8 +74,7 @@ describe("keenioMiddleware", function () {
       (function () {
         var configure = keenioMiddleware.configure.bind(keenioMiddleware);
         configure(configuration);
-      }).should.
-      throw (Error, "You must only specify routes or excludeRoutes, never both.");
+      }).should.throw(Error, "You must only specify routes or excludeRoutes, never both.");
     });
 
     it("should not error if only routes or excludeRoutes was passed in", function () {
@@ -98,8 +96,7 @@ describe("keenioMiddleware", function () {
         (function () {
           var configure = keenioMiddleware.configure.bind(keenioMiddleware);
           configure(configuration);
-        }).should.not.
-        throw (Error, "You must only specify routes or excludeRoutes, never both.");
+        }).should.not.throw(Error, "You must only specify routes or excludeRoutes, never both.");
       });
     });
 
@@ -109,18 +106,23 @@ describe("keenioMiddleware", function () {
           projectId: '<test>',
           writeKey: '<test>'
         }
+      }, afterConfiguration = {
+        client: {
+          projectId: '<test>',
+          writeKey: '<test>'
+        },
+        defaults: {},
+        badProperties: []
       };
 
       var configure = keenioMiddleware.configure.bind(keenioMiddleware);
       (function () {
         configure(configuration);
-      }).should.not.
-      throw (Error);
-      keenioMiddleware.options.should.eql(configuration);
+      }).should.not.throw(Error);
+      keenioMiddleware.options.should.eql(afterConfiguration);
 
       var handle = keenioMiddleware.handle.bind(keenioMiddleware);
-      handle.should.not.
-      throw (Error, "Middleware must be configured before use.");
+      handle.should.not.throw(Error, "Middleware must be configured before use.");
     });
 
     it("should return a valid middleware if handleAll() is executed after valid configuration", function () {
@@ -129,32 +131,94 @@ describe("keenioMiddleware", function () {
           projectId: '<test>',
           writeKey: '<test>'
         }
+      }, afterConfiguration = {
+        client: {
+          projectId: '<test>',
+          writeKey: '<test>'
+        },
+        defaults: {},
+        badProperties: []
       };
 
       var configure = keenioMiddleware.configure.bind(keenioMiddleware);
       (function () {
         configure(configuration);
-      }).should.not.
-      throw (Error);
-      keenioMiddleware.options.should.eql(configuration);
+      }).should.not.throw(Error);
+      keenioMiddleware.options.should.eql(afterConfiguration);
 
       var handleAll = keenioMiddleware.handleAll.bind(keenioMiddleware);
-      handleAll.should.not.
-      throw (Error, "Middleware must be configured before use.");
+      handleAll.should.not.throw(Error, "Middleware must be configured before use.");
     });
 
     it("should error if handle() is executed before calling configure()", function () {
       var handle = keenioMiddleware.handle.bind(keenioMiddleware);
-      handle.should.
-      throw (Error, "Middleware must be configured before use.");
+      handle.should.throw(Error, "Middleware must be configured before use.");
     });
 
     it("should error if handleAll() is executed before calling configure()", function () {
       var handleAll = keenioMiddleware.handleAll.bind(keenioMiddleware);
-      handleAll.should.
-      throw (Error, "Middleware must be configured before use.");
+      handleAll.should.throw(Error, "Middleware must be configured before use.");
     });
 
+  });
+
+  describe("_isValidProperty()", function () {
+    it("should accept valid properties", function () {
+      var tests = [
+        "abc", // less than 256 characters long
+        "^$%&", // a dollar sign cannot be the first character
+        "separated-by-a-dash", // there cannot be periods in the name
+        "cannot-be-a-null-value" // cannot be a null value
+      ];
+      tests.forEach(function (test) {
+        keenioMiddleware._isValidProperty(test).should.be.true;
+      });
+    });
+    it("should not accept invalid properties", function () {
+      var tests = [
+        "abcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabc",
+        "$^%&",
+        "separated.by.a.period",
+        "",
+        undefined,
+        null
+      ];
+      tests.forEach(function (test) {
+        keenioMiddleware._isValidProperty(test).should.be.false;
+      });
+    });
+  });
+
+  describe("_isValidEventCollectionName()", function () {
+    it("should accept valid event collection names", function () {
+      var tests = [
+        "abc", // less than 64 characters long
+        "^%&", // only ascii characters
+        "^%&nodollarinthis", // no dollar symbols
+        "cannot_start_with_an_underscore_", // cannot start with an underscore
+        "cannot.start.or.end.with.periods", // cannot start or end with periods
+        "cannot-be-a-null-value" // cannot be a null value
+      ];
+      tests.forEach(function (test) {
+        keenioMiddleware._isValidEventCollectionName(test).should.be.true;
+      });
+    });
+    it("should not accept invalid event collection names", function () {
+      var tests = [
+        "abcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabc",
+        "ɻʮʭʨ",
+        "^%$&",
+        "_thisshouldnothavestartedwithunderscore",
+        ".thisshouldnothavestartedwithaperiod",
+        "thisshouldnothaveendedwithaperiod.",
+        "",
+        undefined,
+        null
+      ];
+      tests.forEach(function (test) {
+        keenioMiddleware._isValidEventCollectionName(test).should.be.false;
+      });
+    });
   });
 
   describe("_getResponseData()", function () {
@@ -205,12 +269,45 @@ describe("keenioMiddleware", function () {
   });
 
   describe("_sanitizeBody()", function () {
-    it("should wipe out the value inside a 'password' key", function () {
+    it("should wipe out the value inside a 'password' key, even inside hierarhcy", function () {
       var inputData = {
-        password: 'abc123'
+        user: {
+          password: 'abc123'
+        },
+        otherProperty: 'def456'
       }, outputData = {
+        user: {
           password: '[redacted]'
-        };
+        },
+        otherProperty: 'def456'
+      };
+      keenioMiddleware._sanitizeBody(inputData).should.eql(outputData);
+    });
+
+    it("should wipe out the value inside a user-defined bad property", function () {
+      var inputData = {
+        property: 'abc123',
+        otherProperty: 'def456'
+      }, outputData = {
+        property: 'abc123',
+        otherProperty: '[redacted]'
+      };
+      keenioMiddleware.options = {
+        badProperties: ['otherProperty']
+      };
+      keenioMiddleware._sanitizeBody(inputData).should.eql(outputData);
+    });
+
+    it("should wipe out all keys which are invalid Keen.IO properties", function () {
+      var inputData = {
+        '$^%&': 'abc123',
+        'separated.by.a.period': 'def456',
+        validProperty: 'ghi789',
+        otherValidProperty: 'here-it-is'
+      }, outputData = {
+        validProperty: 'ghi789',
+        otherValidProperty: 'here-it-is'
+      };
       keenioMiddleware._sanitizeBody(inputData).should.eql(outputData);
     });
   });
