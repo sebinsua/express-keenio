@@ -24,7 +24,8 @@
     "mocha": "*",
     "sinon": "1.7.3",
     "chai": "*",
-    "jshint": "latest"
+    "jshint": "latest",
+    "docco": "latest"
   },
   "engines": {
     "node": "*"

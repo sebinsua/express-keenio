@@ -5,15 +5,15 @@ var express = require("express"),
 var app = express();
 
 keenioMiddleware.configure({
-    client: clientConfig
+  client: clientConfig
 });
 app.use(keenioMiddleware.handleAll());
 
 app.get('/test', function (req, res) {
-   res.json({
+  res.json({
     special: 'hey',
     abc: 4
-   });
+  });
 });
 
 app.listen(3000);

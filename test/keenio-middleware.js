@@ -624,14 +624,18 @@ describe("keenioMiddleware", function () {
         });
     });
 
-    it("should send no reaction to keen.io if application/json is not specified as the response", function (done) {
+    it("should send an empty reaction body to keen.io if application/json is not specified as the response", function (done) {
       var makeRequest = sinon.spy();
-      keenioMiddleware.keenClient.makeRequest = makeRequest;
+      keenioMiddleware.keenClient.addEvent = makeRequest;
 
       request(app).post('/test')
                   .send('{ "user": "seb" }')
                   .expect('{\n  "user": "seb"\n}', function () {
-                    makeRequest.calledOnce.should.equal(false);
+                    var callArgs = makeRequest.getCall(0).args;
+                    var event = callArgs[1];
+
+                    event.should.have.property('intention');
+                    event.intention.body.should.eql({});
                     done();
                   });
     });
@@ -973,7 +977,7 @@ describe("keenioMiddleware", function () {
         });
     });
 
-    it("should send no reaction to keen.io if application/json is not specified as the response", function (done) {
+    it("should send an empty reaction body to keen.io if application/json is not specified as the response", function (done) {
       app.get('/test', keenioMiddleware.handle(), function (req, res) {
         var requestBody = req.body;
         res.send(requestBody);
@@ -985,7 +989,11 @@ describe("keenioMiddleware", function () {
       request(app).get('/test')
                   .send('{ "user": "seb" }')
                   .expect('{\n  "user": "seb"\n}', function () {
-                    makeRequest.calledOnce.should.equal(false);
+                    var callArgs = makeRequest.getCall(0).args;
+                    var event = callArgs[1];
+
+                    event.should.have.property('intention');
+                    event.intention.body.should.eql({});
                     done();
                   });
     });
