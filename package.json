@@ -5,6 +5,7 @@
   "keywords"        : [
     "middleware",
     "keen.io",
+    "keenio",
     "analytics"
   ],
   "author"          : "Seb Insua <me@sebinsua.com>",
@@ -15,7 +16,8 @@
   "main"            : "./index.js",
   "version"         : "0.0.1",
   "dependencies"    : {
-    "keen.io": "~0.0.3"
+    "keen.io": "~0.0.3",
+    "connect-friendwares": "0.0.2"
   },
   "devDependencies" : {
     "express": "~3.4.7",

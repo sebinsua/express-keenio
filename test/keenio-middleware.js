@@ -122,7 +122,8 @@ describe("keenioMiddleware", function () {
       keenioMiddleware.options.should.eql(afterConfiguration);
 
       var handle = keenioMiddleware.handle.bind(keenioMiddleware);
-      handle.should.not.throw(Error, "Middleware must be configured before use.");
+      handle.should.not.throw(Error, 'express-keenio middleware must be configured before use. Please call ' +
+                                     'keenioMiddleware.configure(options).');
     });
 
     it("should return a valid middleware if handleAll() is executed after valid configuration", function () {
@@ -147,17 +148,20 @@ describe("keenioMiddleware", function () {
       keenioMiddleware.options.should.eql(afterConfiguration);
 
       var handleAll = keenioMiddleware.handleAll.bind(keenioMiddleware);
-      handleAll.should.not.throw(Error, "Middleware must be configured before use.");
+      handleAll.should.not.throw(Error, 'express-keenio middleware must be configured before use. Please call ' +
+                                        'keenioMiddleware.configure(options).');
     });
 
     it("should error if handle() is executed before calling configure()", function () {
       var handle = keenioMiddleware.handle.bind(keenioMiddleware);
-      handle.should.throw(Error, "Middleware must be configured before use.");
+      handle.should.throw(Error, 'express-keenio middleware must be configured before use. Please call ' +
+                                 'keenioMiddleware.configure(options).');
     });
 
     it("should error if handleAll() is executed before calling configure()", function () {
       var handleAll = keenioMiddleware.handleAll.bind(keenioMiddleware);
-      handleAll.should.throw(Error, "Middleware must be configured before use.");
+      handleAll.should.throw(Error, 'express-keenio middleware must be configured before use. Please call ' +
+                                    'keenioMiddleware.configure(options).');
     });
 
   });
@@ -351,7 +355,7 @@ describe("keenioMiddleware", function () {
     });
   });
 
-  describe("_getEventCollectionMetadataForRoute()", function () {
+  describe("_getRouteConfig()", function () {
     var configuration = {
       client: {
         projectId: '<test>',
@@ -378,7 +382,7 @@ describe("keenioMiddleware", function () {
       };
 
       keenioMiddleware.configure(configuration);
-      var metadata = keenioMiddleware._getEventCollectionMetadataForRoute(route);
+      var metadata = keenioMiddleware._getRouteConfig(route);
       metadata.should.be.false;
     });
 
@@ -392,12 +396,12 @@ describe("keenioMiddleware", function () {
         };
 
       keenioMiddleware.configure(configuration);
-      metadata = keenioMiddleware._getEventCollectionMetadataForRoute(route_a);
+      metadata = keenioMiddleware._getRouteConfig(route_a);
       metadata.should.eql({
         eventCollectionName: "specialEventCollectionName"
       });
 
-      metadata = keenioMiddleware._getEventCollectionMetadataForRoute(route_b);
+      metadata = keenioMiddleware._getRouteConfig(route_b);
       metadata.should.eql({});
     });
   });
