@@ -111,7 +111,7 @@ describe("keenioMiddleware", function () {
           projectId: '<test>',
           writeKey: '<test>'
         },
-        defaults: {},
+        handlers: {},
         badProperties: []
       };
 
@@ -137,7 +137,7 @@ describe("keenioMiddleware", function () {
           projectId: '<test>',
           writeKey: '<test>'
         },
-        defaults: {},
+        handlers: {},
         badProperties: []
       };
 
@@ -452,7 +452,7 @@ describe("keenioMiddleware", function () {
       };
 
       keenioMiddleware.options = {
-        defaults: {
+        handlers: {
           generateIdentity: function (req) {
             return req.headers['Client-Api-Key'];
           }
@@ -460,7 +460,7 @@ describe("keenioMiddleware", function () {
       };
 
       keenioMiddleware.identify(req).should.eql('abc123');
-      keenioMiddleware.options.defaults.identifier = null;
+      keenioMiddleware.options.handlers.identifier = null;
     });
 
   });
@@ -692,7 +692,7 @@ describe("keenioMiddleware", function () {
 
   });
 
-  describe("handleAll() - preconfigured routes + altered defaults", function () {
+  describe("handleAll() - preconfigured routes + altered handlers", function () {
     var app;
 
     beforeEach(function () {
@@ -701,7 +701,7 @@ describe("keenioMiddleware", function () {
           projectId: "<fake-project-id>",
           writeKey: "<fake-write-key>"
         },
-        defaults: {
+        handlers: {
           generateIdentity: function (req) {
             return {
               test: "lies all lies - see later test"
