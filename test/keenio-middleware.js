@@ -272,7 +272,7 @@ describe("keenioMiddleware", function () {
 
   });
 
-  describe("_sanitizeBody()", function () {
+  describe("_sanitizeData()", function () {
     it("should wipe out the value inside a 'password' key, even inside hierarhcy", function () {
       var inputData = {
         user: {
@@ -285,7 +285,7 @@ describe("keenioMiddleware", function () {
         },
         otherProperty: 'def456'
       };
-      keenioMiddleware._sanitizeBody(inputData).should.eql(outputData);
+      keenioMiddleware._sanitizeData(inputData).should.eql(outputData);
     });
 
     it("should wipe out the value inside a user-defined bad property", function () {
@@ -299,7 +299,7 @@ describe("keenioMiddleware", function () {
       keenioMiddleware.options = {
         badProperties: ['otherProperty']
       };
-      keenioMiddleware._sanitizeBody(inputData).should.eql(outputData);
+      keenioMiddleware._sanitizeData(inputData).should.eql(outputData);
     });
 
     it("should wipe out all keys which are invalid Keen.IO properties", function () {
@@ -312,7 +312,7 @@ describe("keenioMiddleware", function () {
         validProperty: 'ghi789',
         otherValidProperty: 'here-it-is'
       };
-      keenioMiddleware._sanitizeBody(inputData).should.eql(outputData);
+      keenioMiddleware._sanitizeData(inputData).should.eql(outputData);
     });
   });
 
