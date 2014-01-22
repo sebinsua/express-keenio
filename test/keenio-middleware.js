@@ -814,7 +814,7 @@ describe("keenioMiddleware", function () {
 
   });
 
-  describe("handle(eventCollection, eventTag) - specific route", function () {
+  describe("trackRoute(eventCollection, eventTag) - specific route", function () {
     var app;
 
     beforeEach(function () {
@@ -836,7 +836,7 @@ describe("keenioMiddleware", function () {
     });
 
     it("should send valid event data to keen.io on making a json body request", function (done) {
-      app.post('/test', keenioMiddleware.handle('eventCollectionName', "Posted to test"), function (req, res) {
+      app.post('/test', keenioMiddleware.trackRoute('eventCollectionName', "Posted to test"), function (req, res) {
         var requestBody = req.body;
         res.send(requestBody);
       });
@@ -876,7 +876,7 @@ describe("keenioMiddleware", function () {
     });
 
     it("should send valid event data to keen.io on making a params request", function (done) {
-      app.post('/params/:userId/:someParam/:someOtherParam', keenioMiddleware.handle(), function (req, res) {
+      app.post('/params/:userId/:someParam/:someOtherParam', keenioMiddleware.trackRoute(), function (req, res) {
         var requestBody = req.body;
         res.send(requestBody);
       });
@@ -919,7 +919,7 @@ describe("keenioMiddleware", function () {
     });
 
     it("should send valid event data to keen.io on making a query request", function (done) {
-      app.get('/test', keenioMiddleware.handle(), function (req, res) {
+      app.get('/test', keenioMiddleware.trackRoute(), function (req, res) {
         var requestBody = req.body;
         res.send(requestBody);
       });
@@ -960,7 +960,7 @@ describe("keenioMiddleware", function () {
     });
 
     it("should track a user if they could be identified from a request", function (done) {
-      app.get('/test', keenioMiddleware.handle(), function (req, res) {
+      app.get('/test', keenioMiddleware.trackRoute(), function (req, res) {
         var requestBody = req.body;
         res.send(requestBody);
       });
@@ -982,7 +982,7 @@ describe("keenioMiddleware", function () {
     });
 
     it("should send an empty reaction body to keen.io if application/json is not specified as the response", function (done) {
-      app.get('/test', keenioMiddleware.handle(), function (req, res) {
+      app.get('/test', keenioMiddleware.trackRoute(), function (req, res) {
         var requestBody = req.body;
         res.send(requestBody);
       });
@@ -1003,7 +1003,7 @@ describe("keenioMiddleware", function () {
     });
 
     it("should send a reaction to keen.io if application/json is specified as the response", function (done) {
-      app.get('/test', keenioMiddleware.handle(), function (req, res) {
+      app.get('/test', keenioMiddleware.trackRoute(), function (req, res) {
         var requestBody = req.body;
         res.send(requestBody);
       });
@@ -1022,7 +1022,7 @@ describe("keenioMiddleware", function () {
     });
 
     it("should allow you to set the eventCollectionName with the first argument", function (done) {
-      app.post('/test', keenioMiddleware.handle('eventCollectionName'), function (req, res) {
+      app.post('/test', keenioMiddleware.trackRoute('eventCollectionName'), function (req, res) {
         var requestBody = req.body;
         res.send(requestBody);
       });
@@ -1044,7 +1044,7 @@ describe("keenioMiddleware", function () {
     });
 
     it("should allow you to tag the event with the second argument", function (done) {
-      app.post('/test', keenioMiddleware.handle(null, "Event tag"), function (req, res) {
+      app.post('/test', keenioMiddleware.trackRoute(null, "Event tag"), function (req, res) {
         var requestBody = req.body;
         res.send(requestBody);
       });
