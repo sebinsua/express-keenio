@@ -166,137 +166,7 @@ describe("keenioMiddleware", function () {
 
   });
 
-  describe("_isValidProperty()", function () {
-    it("should accept valid properties", function () {
-      var tests = [
-        "abc", // less than 256 characters long
-        "^$%&", // a dollar sign cannot be the first character
-        "separated-by-a-dash", // there cannot be periods in the name
-        "cannot-be-a-null-value" // cannot be a null value
-      ];
-      tests.forEach(function (test) {
-        keenioMiddleware._isValidProperty(test).should.be.true;
-      });
-    });
-    it("should not accept invalid properties", function () {
-      var tests = [
-        "abcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabc",
-        "$^%&",
-        "separated.by.a.period",
-        "",
-        undefined,
-        null
-      ];
-      tests.forEach(function (test) {
-        keenioMiddleware._isValidProperty(test).should.be.false;
-      });
-    });
-  });
-
-  describe("_sanitizeData()", function () {
-    it("should wipe out the value inside a 'password' key, even inside hierarhcy", function () {
-      var inputData = {
-        user: {
-          password: 'abc123'
-        },
-        otherProperty: 'def456'
-      }, outputData = {
-        user: {
-          password: '[redacted]'
-        },
-        otherProperty: 'def456'
-      };
-      keenioMiddleware._sanitizeData(inputData).should.eql(outputData);
-    });
-
-    it("should wipe out the value inside a user-defined bad property", function () {
-      var inputData = {
-        property: 'abc123',
-        otherProperty: 'def456'
-      }, outputData = {
-        property: 'abc123',
-        otherProperty: '[redacted]'
-      };
-      keenioMiddleware.options = {
-        badProperties: ['otherProperty']
-      };
-      keenioMiddleware._sanitizeData(inputData).should.eql(outputData);
-    });
-
-    it("should wipe out all keys which are invalid Keen.IO properties", function () {
-      var inputData = {
-        '$^%&': 'abc123',
-        'separated.by.a.period': 'def456',
-        validProperty: 'ghi789',
-        otherValidProperty: 'here-it-is'
-      }, outputData = {
-        validProperty: 'ghi789',
-        otherValidProperty: 'here-it-is'
-      };
-      keenioMiddleware._sanitizeData(inputData).should.eql(outputData);
-    });
-  });
-
-  describe("identify()", function () {
-
-    it("should be able to get out data from req.user if this has been set", function () {
-      var req = {
-        user: {
-          id: 'abc123'
-        }
-      };
-
-      keenioMiddleware.identify(req).should.eql({
-        id: 'abc123'
-      });
-    });
-
-    it("should be able to fallback to getting data from a session variable if user was not set", function () {
-      var req = {
-        session: {
-          id: 'abc123'
-        }
-      };
-
-      keenioMiddleware.identify(req).should.eql({
-        id: 'abc123'
-      });
-    });
-
-    it("should be able to fallback to empty data even if header data was sent", function () {
-      var req = {
-        headers: {
-          'Session-Id': '<fake-session>',
-          'User-Agent': 'libwww/4.1'
-        }
-      };
-
-      keenioMiddleware.identify(req).should.eql({});
-    });
-
-    it("should be able to have the identifier overridden to store any kind of identity", function () {
-      var req = {
-        headers: {
-          'Client-Api-Key': 'abc123',
-          'User-Agent': 'libwww/4.1'
-        }
-      };
-
-      keenioMiddleware.options = {
-        handlers: {
-          generateIdentity: function (req) {
-            return req.headers['Client-Api-Key'];
-          }
-        }
-      };
-
-      keenioMiddleware.identify(req).should.eql('abc123');
-      keenioMiddleware.options.handlers.identifier = null;
-    });
-
-  });
-
-  describe("handleAll() - default routes", function () {
+  describe("handle() - default routes", function () {
     var app;
 
     beforeEach(function () {
@@ -345,7 +215,10 @@ describe("keenioMiddleware", function () {
         .expect('{\n  "user": "seb"\n}', function () {
 
           var callArgs, eventCollection, event;
-          callArgs = testRequest.getCall(0).args;
+          callArgs = testRequest.called ? testRequest.getCall(0).args : null;
+          if (!callArgs) {
+            should.Throw("No request was ever made to Keen.IO");  
+          }
           eventCollection = callArgs[0];
           event = callArgs[1];
 
@@ -378,7 +251,10 @@ describe("keenioMiddleware", function () {
         .expect('{\n  "user": "seb"\n}', function () {
 
           var callArgs, eventCollection, event;
-          callArgs = testRequest.getCall(0).args;
+          callArgs = testRequest.called ? testRequest.getCall(0).args : null;
+          if (!callArgs) {
+            should.Throw("No request was ever made to Keen.IO");  
+          }
           eventCollection = callArgs[0];
           event = callArgs[1];
 
@@ -416,7 +292,10 @@ describe("keenioMiddleware", function () {
         .expect('{\n  "user": "seb"\n}', function () {
 
           var callArgs, eventCollection, event;
-          callArgs = testRequest.getCall(0).args;
+          callArgs = testRequest.called ? testRequest.getCall(0).args : null;
+          if (!callArgs) {
+            should.Throw("No request was ever made to Keen.IO");  
+          }
           eventCollection = callArgs[0];
           event = callArgs[1];
 
@@ -451,7 +330,11 @@ describe("keenioMiddleware", function () {
           "user": "seb"
         })
         .expect('{\n  "user": "seb"\n}', function () {
-          var event = testRequest.getCall(0).args[1];
+          var callArgs = testRequest.called ? testRequest.getCall(0).args : null;
+          if (!callArgs) {
+            should.Throw("No request was ever made to Keen.IO");  
+          }
+          var event = callArgs[1];
 
           // event.identity.should.eql();
 
@@ -460,13 +343,16 @@ describe("keenioMiddleware", function () {
     });
 
     it("should send an empty reaction body to keen.io if application/json is not specified as the response", function (done) {
-      var makeRequest = sinon.spy();
-      keenioMiddleware.keenClient.addEvent = makeRequest;
+      var testRequest = sinon.spy();
+      keenioMiddleware.keenClient.addEvent = testRequest;
 
       request(app).post('/test')
                   .send('{ "user": "seb" }')
                   .expect('{\n  "user": "seb"\n}', function () {
-                    var callArgs = makeRequest.getCall(0).args;
+                    var callArgs = testRequest.called ? testRequest.getCall(0).args : null;
+                    if (!callArgs) {
+                      should.Throw("No request was ever made to Keen.IO");  
+                    }
                     var event = callArgs[1];
 
                     event.should.have.property('intention');
@@ -499,7 +385,10 @@ describe("keenioMiddleware", function () {
         })
         .expect('{\n  "user": "seb"\n}', function () {
           var callArgs, event;
-          callArgs = testRequest.getCall(0).args;
+          callArgs = testRequest.called ? testRequest.getCall(0).args : null;
+          if (!callArgs) {
+            should.Throw("No request was ever made to Keen.IO");  
+          }
           event = callArgs[1];
 
           event.identity.should.eql({});
@@ -523,7 +412,7 @@ describe("keenioMiddleware", function () {
 
   });
 
-  describe("handleAll() - preconfigured routes + altered handlers", function () {
+  describe("handle() - preconfigured routes + altered handlers", function () {
     var app;
 
     beforeEach(function () {
@@ -597,7 +486,10 @@ describe("keenioMiddleware", function () {
         })
         .expect('{\n  "user": "seb"\n}', function () {
           var callArgs, eventCollectionName;
-          callArgs = testRequest.getCall(0).args;
+          callArgs = testRequest.called ? testRequest.getCall(0).args : null;
+          if (!callArgs) {
+            should.Throw("No request was ever made to Keen.IO");  
+          }
           eventCollectionName = callArgs[0];
 
           eventCollectionName.should.equal("testEventCollectionName");
@@ -615,7 +507,10 @@ describe("keenioMiddleware", function () {
         })
         .expect('{\n  "user": "seb"\n}', function () {
           var callArgs, event;
-          callArgs = testRequest.getCall(0).args;
+          callArgs = testRequest.called ? testRequest.getCall(0).args : null;
+          if (!callArgs) {
+            should.Throw("No request was ever made to Keen.IO");  
+          }
           event = callArgs[1];
 
           event.tag.should.equal("testTagName");
@@ -633,7 +528,10 @@ describe("keenioMiddleware", function () {
         })
         .expect('{\n  "user": "seb"\n}', function () {
           var callArgs, event;
-          callArgs = testRequest.getCall(0).args;
+          callArgs = testRequest.called ? testRequest.getCall(0).args : null;
+          if (!callArgs) {
+            should.Throw("No request was ever made to Keen.IO");  
+          }
           event = callArgs[1];
 
           event.identity.should.eql({
@@ -682,7 +580,10 @@ describe("keenioMiddleware", function () {
         .expect('{\n  "user": "seb"\n}', function () {
 
           var callArgs, eventCollection, event;
-          callArgs = testRequest.getCall(0).args;
+          callArgs = testRequest.called ? testRequest.getCall(0).args : null;
+          if (!callArgs) {
+            should.Throw("No request was ever made to Keen.IO");  
+          }
           eventCollection = callArgs[0];
           event = callArgs[1];
 
@@ -722,7 +623,10 @@ describe("keenioMiddleware", function () {
         .expect('{\n  "user": "seb"\n}', function () {
 
           var callArgs, eventCollection, event;
-          callArgs = testRequest.getCall(0).args;
+          callArgs = testRequest.called ? testRequest.getCall(0).args : null;
+          if (!callArgs) {
+            should.Throw("No request was ever made to Keen.IO");  
+          }
           eventCollection = callArgs[0];
           event = callArgs[1];
 
@@ -764,7 +668,10 @@ describe("keenioMiddleware", function () {
         .expect('{\n  "user": "seb"\n}', function () {
 
           var callArgs, eventCollection, event;
-          callArgs = testRequest.getCall(0).args;
+          callArgs = testRequest.called ? testRequest.getCall(0).args : null;
+          if (!callArgs) {
+            should.Throw("No request was ever made to Keen.IO");  
+          }
           eventCollection = callArgs[0];
           event = callArgs[1];
 
@@ -804,7 +711,11 @@ describe("keenioMiddleware", function () {
           "user": "seb"
         })
         .expect('{\n  "user": "seb"\n}', function () {
-          var event = testRequest.getCall(0).args[1];
+          var callArgs = testRequest.called ? testRequest.getCall(0).args : null;
+          if (!callArgs) {
+            should.Throw("No request was ever made to Keen.IO");  
+          }
+          var event = callArgs[1];
 
           // event.identity.should.eql();
 
@@ -818,13 +729,16 @@ describe("keenioMiddleware", function () {
         res.send(requestBody);
       });
 
-      var makeRequest = sinon.spy();
-      keenioMiddleware.keenClient.addEvent = makeRequest;
+      var testRequest = sinon.spy();
+      keenioMiddleware.keenClient.addEvent = testRequest;
 
       request(app).get('/test')
                   .send('{ "user": "seb" }')
                   .expect('{\n  "user": "seb"\n}', function () {
-                    var callArgs = makeRequest.getCall(0).args;
+                    var callArgs = testRequest.called ? testRequest.getCall(0).args : null;
+                    if (!callArgs) {
+                      should.Throw("No request was ever made to Keen.IO");  
+                    }
                     var event = callArgs[1];
 
                     event.should.have.property('intention');
@@ -866,7 +780,11 @@ describe("keenioMiddleware", function () {
           "user": "seb"
         })
         .expect('{\n  "user": "seb"\n}', function () {
-          var eventCollection = testRequest.getCall(0).args[0];
+          var callArgs = testRequest.called ? testRequest.getCall(0).args : null;
+          if (!callArgs) {
+            should.Throw("No request was ever made to Keen.IO");  
+          }
+          var eventCollection = callArgs[0];
 
           eventCollection.should.equal("eventCollectionName");
 
@@ -888,7 +806,11 @@ describe("keenioMiddleware", function () {
           "user": "seb"
         })
         .expect('{\n  "user": "seb"\n}', function () {
-          var event = testRequest.getCall(0).args[1];
+          var callArgs = testRequest.called ? testRequest.getCall(0).args : null;
+          if (!callArgs) {
+            should.Throw("No request was ever made to Keen.IO");  
+          }
+          var event = callArgs[1];
 
           event.tag.should.equal("Event tag");
 

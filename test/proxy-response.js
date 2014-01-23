@@ -2,9 +2,15 @@
 
 var should = require('chai').should();
 
-var getResponseData = require('../lib/proxy-response').getResponseData;
+var ProxyResponseModule = require('../lib/proxy-response');
 
 describe("_getResponseData()", function () {
+  var getResponseData;
+  beforeEach(function () {
+    var proxyResponseHandler = ProxyResponseModule({});
+    getResponseData = proxyResponseHandler.getResponseData;
+  });
+
   it("should support a single numeric argument", function () {
     getResponseData([201]).should.eql({
       status: 201
