@@ -2,7 +2,7 @@
 
 var should = require('chai').should();
 
-var ProxyResponseModule = require('../lib/proxy-response');
+var ProxyResponseModule = require('../../lib/parse/proxy-response');
 
 describe("_getResponseData()", function () {
   var getResponseData;

@@ -2,7 +2,7 @@
 
 var should = require('chai').should();
 
-var IdentifyModule = require('../lib/identify');
+var IdentifyModule = require('../../lib/parse/identify');
 
 describe("identify()", function () {
 
