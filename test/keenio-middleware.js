@@ -193,38 +193,6 @@ describe("keenioMiddleware", function () {
     });
   });
 
-  describe("_isValidEventCollectionName()", function () {
-    it("should accept valid event collection names", function () {
-      var tests = [
-        "abc", // less than 64 characters long
-        "^%&", // only ascii characters
-        "^%&nodollarinthis", // no dollar symbols
-        "cannot_start_with_an_underscore_", // cannot start with an underscore
-        "cannot.start.or.end.with.periods", // cannot start or end with periods
-        "cannot-be-a-null-value" // cannot be a null value
-      ];
-      tests.forEach(function (test) {
-        keenioMiddleware._isValidEventCollectionName(test).should.be.true;
-      });
-    });
-    it("should not accept invalid event collection names", function () {
-      var tests = [
-        "abcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabc",
-        "ɻʮʭʨ",
-        "^%$&",
-        "_thisshouldnothavestartedwithunderscore",
-        ".thisshouldnothavestartedwithaperiod",
-        "thisshouldnothaveendedwithaperiod.",
-        "",
-        undefined,
-        null
-      ];
-      tests.forEach(function (test) {
-        keenioMiddleware._isValidEventCollectionName(test).should.be.false;
-      });
-    });
-  });
-
   describe("_sanitizeData()", function () {
     it("should wipe out the value inside a 'password' key, even inside hierarhcy", function () {
       var inputData = {
