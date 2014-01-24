@@ -83,3 +83,40 @@ describe("_sanitizeData()", function () {
     keenEventHandler._sanitizeData(inputData).should.eql(outputData);
   });
 });
+
+describe("_checkPropertyDepth()", function () {
+  var keenEventHandler;
+  beforeEach(function () {
+    keenEventHandler = new KeenEventModule({});
+  });
+
+  it("should give the correct depth of the deepest property of an empty object", function () {
+    var obj = {};
+    keenEventHandler._checkPropertyDepth(obj).should.equal(1);
+  });
+
+  it("should give the correct depth of the deepest property of an object with two levels", function () {
+    var obj = { a: { b: 'at depth 2' }};
+    keenEventHandler._checkPropertyDepth(obj).should.equal(2);
+  });
+
+  it("should give the correct depth of the deepest property of an object with five levels", function () {
+    var obj = { a: { b: 'at depth 2', h: { i: 'at depth 3'} }, c: { d: { e: { f: { g: 'at depth 5' }}}}};
+    keenEventHandler._checkPropertyDepth(obj).should.equal(5);
+  });
+
+  it("will not smite unless it is told to", function () {
+    var rigorMortis = { a: { b: { c: { d: { e: { f: { g: { h: { i: { j: { k: { l: 'wow so deep' }}}}}}}}}}}};
+    var notSmitten = { a: { b: { c: { d: { e: { f: { g: { h: { i: { j: { k: { l: 'wow so deep' }}}}}}}}}}}};
+    keenEventHandler._checkPropertyDepth(notSmitten);
+    notSmitten.should.eql(rigorMortis);
+  });
+
+  it("will do its master's bidding and smite if it is told to", function () {
+    var rigorMortis = { a: { b: { c: { d: { e: { f: { g: { h: { i: { j: { k: { l: 'wow so deep' }}}}}}}}}}}};
+    var smitten = { a: { b: { c: { d: { e: { f: { g: { h: { i: { j: { k: { l: 'wow so deep' }}}}}}}}}}}};
+    keenEventHandler._checkPropertyDepth(smitten, true);
+    smitten.should.not.eql(rigorMortis);
+    // good boy! *pat pat*
+  });
+});

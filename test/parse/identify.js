@@ -15,7 +15,9 @@ describe("identify()", function () {
 
     var identifyHandler = new IdentifyModule({});
     identifyHandler.identify(req).should.eql({
-      id: 'abc123'
+      user: {
+        id: 'abc123'
+      }
     });
   });
 
@@ -28,7 +30,9 @@ describe("identify()", function () {
 
     var identifyHandler = new IdentifyModule({});
     identifyHandler.identify(req).should.eql({
-      id: 'abc123'
+      session: {
+        id: 'abc123'
+      }
     });
   });
 
