@@ -8,18 +8,18 @@ keenioMiddleware.configure({
   client: clientConfig
 });
 
-app.get('/test', keenioMiddleware.handle("testEventCollection", "Event added to collection"), function (req, res) {
+app.get('/test', keenioMiddleware.trackRoute("testEventCollection", "Event added to collection"), function (req, res) {
   res.json({
     special: 'hey',
     abc: 4
   });
 });
 
-app.get('/array-collection-test', keenioMiddleware.handle("arrayDataCollection", "Array added to collection"), function (req, res) {
+app.get('/array-collection-test', keenioMiddleware.trackRoute("arrayDataCollection", "Array added to collection"), function (req, res) {
   res.json([1, 2, 3, 4, 5, 6, 7]);
 });
 
-app.get('/array-hiearchical-properties-test', keenioMiddleware.handle("arrayObjectProperties", "Array added to collection"), function (req, res) {
+app.get('/array-hierarchical-properties-test', keenioMiddleware.trackRoute("arrayObjectProperties", "Array added to collection"), function (req, res) {
   res.json([
     {
       name: "Person 1",
