@@ -52,10 +52,10 @@ var express = require("express"),
 
 var app = express();
 
-keenioMiddleware.configure({ client: { projectId: '<test>', writeKey: '<test>'} });
+keenioMiddleware.configure({ client: { projectId: '<test>', writeKey: '<test>' } });
 app.configure(function () {
    app.use(express.bodyParser());
-   app.use(keenioMiddleware.handleAll());
+   app.use(keenioMiddleware);
    app.use(express.router);
 });
 
@@ -92,7 +92,7 @@ It's possible to override the internal behaviour of the middleware like so:
     projectId: '<test>',
     writeKey: '<test>'
   }
-  defaults: {
+  handlers: {
     generateIdentity: function (req) {},
     generateEventCollectionName: function (route) {},
     parseRequestBody: function (body) {},
@@ -101,9 +101,7 @@ It's possible to override the internal behaviour of the middleware like so:
 }
 ```
 
-*It's likely however that this might change in future.*
-
-### Excluding routes from handleAll()
+### Excluding routes from default middleware operation
 
 ```javascript
 {
@@ -117,7 +115,7 @@ It's possible to override the internal behaviour of the middleware like so:
 }
 ```
 
-### Defining route configuration for handleAll()
+### Defining route configuration for middleware operation
 
 ```javascript
 {
