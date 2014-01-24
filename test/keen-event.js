@@ -142,3 +142,21 @@ describe("_checkForArraysOfObjects()", function () {
 
   });
 });
+
+describe("_checkForExtremelyLongStrings()", function () {
+  var keenEventHandler;
+  beforeEach(function () {
+    keenEventHandler = new KeenEventModule({});
+  });
+
+  it("should return the same object when given no extremely long strings", function () {
+    var obj = { a: 2, aString: 'abc' };
+    keenEventHandler._checkForExtremelyLongStrings(obj).should.eql(obj);
+  });
+
+  it("should remove extremely long strings from an object", function () {
+    var obj = { a: 2, aString: Array(1000).join("abc") };
+    var smitten = { a: 2 };
+    keenEventHandler._checkForExtremelyLongStrings(obj).should.eql(smitten);
+  });
+});
