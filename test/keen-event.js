@@ -132,8 +132,10 @@ describe("_checkForArraysOfObjects()", function () {
     keenEventHandler._checkForArraysOfObjects(obj).should.eql(obj);
   });
 
-  xit("should remove arrays-of-objects if they are found", function () {
+  it("should remove arrays-of-objects if they are found", function () {
     var obj = { a: 2, deeper: { b: 3, c: [{ id: 1 }, { id: 2 }, { id: 3 }] } };
+    var smitten = { a: 2, deeper: { b: 3 } };
+    keenEventHandler._checkForArraysOfObjects(obj).should.eql(smitten);
   });
 
   xit("should execute an aggregation method on arrays-of-objects when found", function () {
