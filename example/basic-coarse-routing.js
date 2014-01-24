@@ -7,7 +7,7 @@ var app = express();
 keenioMiddleware.configure({
   client: clientConfig
 });
-app.use(keenioMiddleware.handleAll());
+app.use(keenioMiddleware);
 
 app.get('/test', function (req, res) {
   res.json({
