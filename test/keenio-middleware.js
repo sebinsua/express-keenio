@@ -51,6 +51,9 @@ describe("keenioMiddleware", function () {
           }
         },
         errorMessage: "writeKey is missing from the client options passed into the keen.io middleware and was mandatory."
+      }, {
+        configuration: 'here is my projectId (1) and writeKey (47)',
+        errorMessage: "Configuration must be a valid object."
       }];
 
       tests.forEach(function (test) {
