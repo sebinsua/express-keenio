@@ -37,7 +37,7 @@ var app = express();
 keenioMiddleware.configure({ client: { projectId: '<test>', writeKey: '<test>'} });
 keenioMiddleware.on('error', console.warn);
 
-app.get('/test', keenioMiddleware.handle("testEventCollection"), function (req, res) {
+app.get('/test', keenioMiddleware.trackRoute("testEventCollection"), function (req, res) {
    // Your code goes here.
 });
 
