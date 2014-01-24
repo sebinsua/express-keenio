@@ -103,7 +103,7 @@ describe("keenioMiddleware", function () {
       });
     });
 
-    it("should return a valid middleware if handle() is executed after valid configuration", function () {
+    it("should return a valid middleware if trackRoute() is executed after valid configuration", function () {
       var configuration = {
         client: {
           projectId: '<test>',
@@ -124,7 +124,7 @@ describe("keenioMiddleware", function () {
       }).should.not.throw(Error);
       keenioMiddleware.options.should.eql(afterConfiguration);
 
-      var handle = keenioMiddleware.handle.bind(keenioMiddleware);
+      var handle = keenioMiddleware.trackRoute.bind(keenioMiddleware);
       handle.should.not.throw(Error, 'express-keenio middleware must be configured before use. Please call ' +
                                      'keenioMiddleware.configure(options).');
     });

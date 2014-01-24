@@ -120,3 +120,23 @@ describe("_checkPropertyDepth()", function () {
     // good boy! *pat pat*
   });
 });
+
+describe("_checkForArraysOfObjects()", function () {
+  var keenEventHandler;
+  beforeEach(function () {
+    keenEventHandler = new KeenEventModule({});
+  });
+
+  it("should return the same object when given no arrays-of-objects", function () {
+    var obj = { a: 2, deeper: { b: 3, c: [1, 2, 3] } };
+    keenEventHandler._checkForArraysOfObjects(obj).should.eql(obj);
+  });
+
+  xit("should remove arrays-of-objects if they are found", function () {
+    var obj = { a: 2, deeper: { b: 3, c: [{ id: 1 }, { id: 2 }, { id: 3 }] } };
+  });
+
+  xit("should execute an aggregation method on arrays-of-objects when found", function () {
+
+  });
+});
