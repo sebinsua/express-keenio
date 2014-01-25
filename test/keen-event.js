@@ -2,12 +2,14 @@
 
 var should = require('chai').should();
 
+var EventEmitter = require('events').EventEmitter;
+
 var KeenEventModule = require('../lib/keen-event');
 
 describe("_isValidProperty()", function () {
   var keenEventHandler;
   beforeEach(function () {
-    keenEventHandler = new KeenEventModule({});
+    keenEventHandler = new KeenEventModule({}, new EventEmitter());
   });
 
   it("should accept valid properties", function () {
@@ -51,7 +53,7 @@ describe("_sanitizeData()", function () {
       },
       otherProperty: 'def456'
     };
-    keenEventHandler = new KeenEventModule({});
+    keenEventHandler = new KeenEventModule({}, new EventEmitter());
     keenEventHandler._sanitizeData(inputData).should.eql(outputData);
   });
 
@@ -64,8 +66,8 @@ describe("_sanitizeData()", function () {
       otherProperty: '[redacted]'
     };
     keenEventHandler = new KeenEventModule({
-      badProperties: ['otherProperty']
-    });
+      blacklistProperties: ['otherProperty']
+    }, new EventEmitter());
     keenEventHandler._sanitizeData(inputData).should.eql(outputData);
   });
 
@@ -79,7 +81,7 @@ describe("_sanitizeData()", function () {
       validProperty: 'ghi789',
       otherValidProperty: 'here-it-is'
     };
-    keenEventHandler = new KeenEventModule({});
+    keenEventHandler = new KeenEventModule({}, new EventEmitter());
     keenEventHandler._sanitizeData(inputData).should.eql(outputData);
   });
 });
@@ -87,7 +89,7 @@ describe("_sanitizeData()", function () {
 describe("_checkPropertyDepth()", function () {
   var keenEventHandler;
   beforeEach(function () {
-    keenEventHandler = new KeenEventModule({});
+    keenEventHandler = new KeenEventModule({}, new EventEmitter());
   });
 
   it("should give the correct depth of the deepest property of an empty object", function () {
@@ -124,7 +126,7 @@ describe("_checkPropertyDepth()", function () {
 describe("_checkForArraysOfObjects()", function () {
   var keenEventHandler;
   beforeEach(function () {
-    keenEventHandler = new KeenEventModule({});
+    keenEventHandler = new KeenEventModule({}, new EventEmitter());
   });
 
   it("should return the same object when given no arrays-of-objects", function () {
@@ -146,7 +148,7 @@ describe("_checkForArraysOfObjects()", function () {
 describe("_checkForExtremelyLongStrings()", function () {
   var keenEventHandler;
   beforeEach(function () {
-    keenEventHandler = new KeenEventModule({});
+    keenEventHandler = new KeenEventModule({}, new EventEmitter());
   });
 
   it("should return the same object when given no extremely long strings", function () {
