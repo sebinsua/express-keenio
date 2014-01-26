@@ -36,10 +36,7 @@ app.get('/send-method', function (req, res) {
 
 app.get('/send-method-forcing-json-in-strange-way', function (req, res) {
   res.set('Content-Type', 'application/json');
-  res.send("{
-    special: 'hey',
-    abc: 4
-  }");
+  res.send("{ special: 'hey', abc: 4 }");
 });
 
 app.get('/redirect-method', function (req, res) {
@@ -66,6 +63,7 @@ app.get('/redirect-method-with-path', function (req, res) {
 app.get('/render-method', function (req, res) {
   // We *DEFINITELY* want this - and we definitely aren't currently gettin' it.
   // idgaf ABOUT crashing something, I just want the data. idgaf.
+  // What happens when the options is converted into a string and possible goes towards res.send?
   res.render('i-might-record-this-but-options-are-more-important', {
     even: 'html-pages',
     might: 'have-data-that-is-dynamically',
