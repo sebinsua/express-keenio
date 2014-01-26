@@ -14,7 +14,7 @@ describe("_getResponseData()", function () {
   it("should support a single numeric argument", function () {
     getResponseData([201]).should.eql({
       status: 201,
-      body: null
+      body: 201
     });
   });
 

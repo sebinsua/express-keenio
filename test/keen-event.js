@@ -162,3 +162,21 @@ describe("_checkForExtremelyLongStrings()", function () {
     keenEventHandler._checkForExtremelyLongStrings(obj).should.eql(smitten);
   });
 });
+
+describe("_checkForFunctions()", function () {
+  var keenEventHandler;
+  beforeEach(function () {
+    keenEventHandler = new KeenEventModule({}, new EventEmitter());
+  });
+
+  it("should return the same object when given no functions", function () {
+    var obj = { a: 2, notAFunction: 'hey' };
+    keenEventHandler._checkForFunctions(obj).should.eql(obj);
+  });
+
+  it("should remove functions from an object", function () {
+    var obj = { a: 2, deep: { aFunction: function () {} } };
+    var smitten = { a: 2, deep: {} };
+    keenEventHandler._checkForFunctions(obj).should.eql(smitten);
+  });
+});
