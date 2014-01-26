@@ -10,9 +10,6 @@ keenioMiddleware.configure({
 app.use(keenioMiddleware);
 
 app.get('/json-method', function (req, res) {
-  // @todo: Something to note is that we're letting objects become strings, to be come objects again
-  //        and this is shitty.
-  // Behind the scenes uses res.send().
   res.json({
     special: 'hey',
     abc: 4
@@ -20,11 +17,7 @@ app.get('/json-method', function (req, res) {
 });
 
 app.get('/jsonp-method', function (req, res) {
-  // @todo: If app.get('json callback something something') is set
-  // then you will need to parse something like this:
-  // typeof $callbackName === 'function' && $callbackName($json-string);
-  // @todo: Deal with in a similar way to how we are going to deal with .json().
-  // Behind the scenes uses res.send().
+  // It doesn't matter about that callback thing, since the object passed in here is an object.
   res.jsonp({
     special: 'hey',
     abc: 4
@@ -36,6 +29,31 @@ app.get('/send-method', function (req, res) {
     special: 'hey',
     abc: 4
   });
+});
+
+app.get('/send-method-swap-the-status-and-body', function (req, res) {
+    // @todo: Add in backwards compatability spoken about here. 
+    //        For both .json and .jsonp and .send.
+    // See: https://github.com/visionmedia/express/blob/master/lib/response.js#L91
+    res.send({ yes: true }, 201);
+})
+
+app.get('/json-method-only-status', function (req, res) {
+    // @todo: Check through and make sure that reaction gets an empty {}
+    //        Or a NULL, but definitely *not* an undefined.
+    res.send(201);
+});
+
+app.get('/jsonp-method-only-status', function (req, res) {
+    // @todo: Check through and make sure that reaction gets an empty {}
+    //        Or a NULL, but definitely *not* an undefined.
+    res.send(201);
+});
+
+app.get('/send-method-only-status', function (req, res) {
+    // @todo: Check through and make sure that reaction gets an empty {}
+    //        Or a NULL, but definitely *not* an undefined.
+    res.send(201);
 });
 
 app.get('/send-method-with-json-string', function (req, res) {
@@ -52,7 +70,7 @@ app.get('/send-method-forcing-json-in-strange-way', function (req, res) {
 
 app.get('/redirect-method', function (req, res) {
   // Behind the scenes *DOES NOT* use res.send().
-  // But we would still like to capture from it, so
+  // @todo: But we would still like to capture from it, so
   // it's up for inclusion in the proxy response function. :)
   res.redirect('http://google.co.uk');
 });
