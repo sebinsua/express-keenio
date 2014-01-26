@@ -13,7 +13,8 @@ describe("_getResponseData()", function () {
 
   it("should support a single numeric argument", function () {
     getResponseData([201]).should.eql({
-      status: 201
+      status: 201,
+      body: null
     });
   });
 
@@ -48,6 +49,17 @@ describe("_getResponseData()", function () {
     getResponseData([404, {
       "error": "message"
     }]).should.eql({
+      status: 404,
+      body: {
+        error: "message"
+      }
+    });
+  });
+
+  it("should support the two argument backward-compatability mode (data, status)", function () {
+    getResponseData([{
+      "error": "message"
+    }, 404]).should.eql({
       status: 404,
       body: {
         error: "message"
