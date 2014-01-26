@@ -49,10 +49,27 @@ app.get('/redirect-method', function (req, res) {
   res.redirect('http://google.co.uk');
 });
 
+app.get('/redirect-method-with-2-args', function (req, res) {
+  // Behind the scenes *DOES NOT* use res.send().
+  // But we would still like to capture from it, so
+  // it's up for inclusion in the proxy response function. :)
+  res.redirect(200, 'http://google.co.uk');
+});
+
+app.get('/redirect-method-with-path', function (req, res) {
+  // Behind the scenes *DOES NOT* use res.send().
+  // But we would still like to capture from it, so
+  // it's up for inclusion in the proxy response function. :)
+  res.redirect(200, '../');
+});
+
 app.get('/render-method', function (req, res) {
-  res.json({
-    special: 'hey',
-    abc: 4
+  // We *DEFINITELY* want this - and we definitely aren't currently gettin' it.
+  // idgaf ABOUT crashing something, I just want the data. idgaf.
+  res.render('i-might-record-this-but-options-are-more-important', {
+    even: 'html-pages',
+    might: 'have-data-that-is-dynamically',
+    shown: 'shown-to-the-user'
   });
 });
 
