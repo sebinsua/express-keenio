@@ -5,15 +5,6 @@ express-keenio
 
 Install Keen.IO analytics support into your Node.JS [Express.js](https://github.com/visionmedia/express) app in mere seconds.
 
-This software is currently in alpha stage - the interfaces may change, the underyling code needs to be refactored and there will likely be lots of bugs.
-
-Premise
--------
-* Events can be seen as an intention-reaction mapping.
-* Events belong in a collection together when they can be described by similar properties.
-* We should capture almost everything (events, environment, user identity and metadata e.g. repeat visits.)
-* Installation should be fast.
-
 Getting Started
 ---------------
 
@@ -26,18 +17,18 @@ $ npm install express-keenio
 Setup
 -----
 
-It's possible to run the middleware against specific routes decorator-style:
+It's possible to use the middleware against specific routes decorator-style:
 
 ```javascript
 var express = require("express"),
-    keenioMiddleware = require('express-keenio');
+    keenio = require('express-keenio');
 
 var app = express();
 
-keenioMiddleware.configure({ client: { projectId: '<test>', writeKey: '<test>'} });
-keenioMiddleware.on('error', console.warn);
+keenio.configure({ client: { projectId: '<test>', writeKey: '<test>'} });
+keenio.on('error', console.warn); // There are 'error', 'info', 'track', and 'flush' events which are emitted.
 
-app.get('/test', keenioMiddleware.trackRoute("testEventCollection"), function (req, res) {
+app.get('/test', keenio.trackRoute("testEventCollection"), function (req, res) {
    // Your code goes here.
 });
 
@@ -48,14 +39,14 @@ Or it's possible to make the middleware handle all routes as shown below:
 
 ```javascript
 var express = require("express"),
-    keenioMiddleware = require('express-keenio');
+    keenio = require('express-keenio');
 
 var app = express();
 
-keenioMiddleware.configure({ client: { projectId: '<test>', writeKey: '<test>' } });
+keenio.configure({ client: { projectId: '<test>', writeKey: '<test>' } });
 app.configure(function () {
    app.use(express.bodyParser());
-   app.use(keenioMiddleware);
+   app.use(keenio);
    app.use(express.router);
 });
 
@@ -73,6 +64,8 @@ Configuration
 
 ### Keen.IO Client Configuration
 
+See [KeenClient-Node#initialization](https://github.com/keenlabs/KeenClient-node#initialization).
+
 ```javascript
 {
   client: {
@@ -82,9 +75,44 @@ Configuration
 }
 ```
 
+### Route Configuration
+
+If you are not using the decorator-style version of the middleware, and would like either more control over which event collections exist or the ability to disable specific event collections you may configure the middleware.
+
+*You must pick either 'routes' or 'excludeRoutes' but not both.*
+
+#### Excluding routes from default middleware operation
+
+```javascript
+{
+  client: {
+    projectId: '<test>',
+    writeKey: '<test>'
+  }
+  excludeRoutes: [
+    { method: 'get', route: 'route-name' }
+  ]
+}
+```
+
+#### Defining route configuration for middleware operation
+
+```javascript
+{
+  client: {
+    projectId: '<test>',
+    writeKey: '<test>'
+  }
+  routes: [
+    { method: 'get', route: 'route-name-1', eventCollectionName: '', tag: '' },
+    { method: 'post', route: 'route-name-2', eventCollectionName: '', tag: '' }
+  ]
+}
+```
+
 ### Middleware Overrides
 
-It's possible to override the internal behaviour of the middleware like so:
+While not recommended it's possible to override some of the internal behaviours of the middleware like so:
 
 ```javascript
 {
@@ -101,47 +129,19 @@ It's possible to override the internal behaviour of the middleware like so:
 }
 ```
 
-### Excluding routes from default middleware operation
-
-```javascript
-{
-  client: {
-    projectId: '<test>',
-    writeKey: '<test>'
-  }
-  excludeRoutes: [
-    { method: 'get', route: 'route-name' }
-  ]
-}
-```
-
-### Defining route configuration for middleware operation
-
-```javascript
-{
-  client: {
-    projectId: '<test>',
-    writeKey: '<test>'
-  }
-  routes: [
-    { method: 'get', route: 'route-name-1', eventCollectionName: '', tag: '' },
-    { method: 'post', route: 'route-name-2', eventCollectionName: '', tag: '' }
-  ]
-}
-```
-
-*You must pick either 'routes' or 'excludeRoutes' but not both.*
-
-Note
-----
-* There should be no more than 1,000 properties per EventCollection so dynamic naming of properties may be harmful. Responses with these should be switched off if possible.
-
 Tests
 -----
 ```shell
 $ npm install --dev
 $ npm test
 ```
+
+Premise
+-------
+* Events can be seen as an intention-reaction mapping.
+* Events belong in a collection together when they can be described by similar properties.
+* We should capture almost everything (events, environment, user identity and metadata e.g. repeat visits.)
+* Installation should be fast.
 
 Contributors
 ------------
