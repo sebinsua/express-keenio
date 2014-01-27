@@ -31,14 +31,13 @@ For example, an event might look like this:
       "price": 5.00
     },
     "query": {},
-    "referer": 'http://keen.io/' 
+    "referer": "http://keen.io/" 
   },
   "reaction": {
     "success": true,
     "userAddress": "..."
   },
   "httpStatus": 200,
-  "tag": "..."
   "environment": {
     "library": "express-keenio"
   }
@@ -117,7 +116,7 @@ See [KeenClient-Node#initialization](https://github.com/keenlabs/KeenClient-node
 
 ### Blacklist Properties
 
-
+By default we redact the values of any 'password' properties. If you wish you can pass in a list of other properties you wish to blacklist as shown below:
 
 ```javascript
 {
@@ -158,8 +157,8 @@ If you are not using the decorator-style version of the middleware, and would li
     writeKey: '<test>'
   }
   routes: [
-    { method: 'get', route: 'route-name-1', eventCollectionName: '', tag: '' },
-    { method: 'post', route: 'route-name-2', eventCollectionName: '', tag: '' }
+    { method: 'get', route: 'route-name-1', eventCollectionName: '' },
+    { method: 'post', route: 'route-name-2', eventCollectionName: '' }
   ]
 }
 ```
