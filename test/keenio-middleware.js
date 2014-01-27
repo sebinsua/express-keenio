@@ -190,6 +190,8 @@ describe("keenioMiddleware", function () {
         app.use(express.urlencoded()); // note: these two replace: app.use(express.bodyParser());
         app.use(express.multipart());
         // see:  http://stackoverflow.com/questions/19581146/how-to-get-rid-of-connect-3-0-deprecation-alert
+        app.use(express.cookieParser('S3CRE7'));
+        app.use(express.session({ store: new express.session.MemoryStore, secret: 'S3CRE7', key: 'sid' }));        
         app.use(keenioMiddleware);
         app.use(app.router);
       });
@@ -331,6 +333,7 @@ describe("keenioMiddleware", function () {
       keenioMiddleware.keenClient.addEvent = testRequest;
 
       request(app).post('/test')
+        .set('Referer', 'http://www.google.co.uk')
         .send({
           "user": "seb"
         })
@@ -341,7 +344,8 @@ describe("keenioMiddleware", function () {
           }
           var event = callArgs[1];
 
-          // event.identity.should.eql();
+          event.intention.referer.should.eql('http://www.google.co.uk');
+          should.exist(event.identity.session);
 
           done();
         });
@@ -404,7 +408,7 @@ describe("keenioMiddleware", function () {
           }
           event = callArgs[1];
 
-          event.identity.should.eql({});
+          should.exist(event.identity.session);
           done();
         });
     });
@@ -710,7 +714,7 @@ describe("keenioMiddleware", function () {
         });
     });
 
-    it("should track a user if they could be identified from a request", function (done) {
+    it("should not track a user if they could not be identified from a request", function (done) {
       app.get('/test', keenioMiddleware.trackRoute(), function (req, res) {
         var requestBody = req.body;
         res.send(requestBody);
@@ -730,7 +734,7 @@ describe("keenioMiddleware", function () {
           }
           var event = callArgs[1];
 
-          // event.identity.should.eql();
+          event.identity.should.eql({});
 
           done();
         });
