@@ -188,13 +188,15 @@ describe("keenioMiddleware", function () {
       app.configure(function () {
         app.use(express.json());
         app.use(express.urlencoded()); // note: these two replace: app.use(express.bodyParser());
+        app.use(express.multipart());
         // see:  http://stackoverflow.com/questions/19581146/how-to-get-rid-of-connect-3-0-deprecation-alert
-        app.use(keenioMiddleware.handleAll());
+        app.use(keenioMiddleware);
         app.use(app.router);
       });
 
       app.post('/test', function (req, res) {
         var requestBody = req.body;
+        // console.log(requestBody);
         res.send(requestBody);
       });
       app.post('/params/:userId/:someParam/:someOtherParam', function (req, res) {
@@ -345,35 +347,43 @@ describe("keenioMiddleware", function () {
         });
     });
 
-    it("should send an empty reaction body to keen.io if application/json is not specified as the response", function (done) {
+    it("should send a reaction to Keen.IO if application/json is specified as the response", function (done) {
       var testRequest = sinon.spy();
       keenioMiddleware.keenClient.addEvent = testRequest;
 
       request(app).post('/test')
-                  .send('{ "user": "seb" }')
-                  .expect('{\n  "user": "seb"\n}', function () {
-                    var callArgs = testRequest.called ? testRequest.getCall(0).args : null;
-                    if (!callArgs) {
-                      should.Throw("No request was ever made to Keen.IO");  
-                    }
-                    var event = callArgs[1];
+        .send({
+          "value": "json"
+        })
+        .expect('{\n  "value": "json"\n}', function () {
+          var callArgs, event;
+          callArgs = testRequest.called ? testRequest.getCall(0).args : null;
+          if (!callArgs) {
+            should.Throw("No request was ever made to Keen.IO");  
+          }
+          event = callArgs[1];
 
-                    event.should.have.property('intention');
-                    event.intention.body.should.eql({});
-                    done();
-                  });
+          event.intention.body.should.eql({ "value": "json" });
+          done();
+        });
     });
 
-    it("should send a reaction to keen.io if application/json is specified as the response", function (done) {
-      var makeRequest = sinon.spy();
-      keenioMiddleware.keenClient.addEvent = makeRequest;
+    it("should send a reaction to Keen.IO if application/x-www-form-urlencoded is specified as the response", function (done) {
+      var testRequest = sinon.spy();
+      keenioMiddleware.keenClient.addEvent = testRequest;
 
       request(app).post('/test')
-        .send({
-          "user": "seb"
-        })
-        .expect('{\n  "user": "seb"\n}', function () {
-          makeRequest.calledOnce.should.be.true;
+        .type('form')
+        .send('value=urlencoded')
+        .expect('{\n  "value": "urlencoded"\n}', function () {
+          var callArgs, event;
+          callArgs = testRequest.called ? testRequest.getCall(0).args : null;
+          if (!callArgs) {
+            should.Throw("No request was ever made to Keen.IO");  
+          }
+          event = callArgs[1];
+
+          event.intention.body.should.eql({ "value": "urlencoded" });
           done();
         });
     });
@@ -726,7 +736,7 @@ describe("keenioMiddleware", function () {
         });
     });
 
-    it("should send an empty reaction body to keen.io if application/json is not specified as the response", function (done) {
+    it("should send a reaction to Keen.IO if application/json is specified as the response", function (done) {
       app.get('/test', keenioMiddleware.trackRoute(), function (req, res) {
         var requestBody = req.body;
         res.send(requestBody);
@@ -736,35 +746,43 @@ describe("keenioMiddleware", function () {
       keenioMiddleware.keenClient.addEvent = testRequest;
 
       request(app).get('/test')
-                  .send('{ "user": "seb" }')
-                  .expect('{\n  "user": "seb"\n}', function () {
-                    var callArgs = testRequest.called ? testRequest.getCall(0).args : null;
-                    if (!callArgs) {
-                      should.Throw("No request was ever made to Keen.IO");  
-                    }
-                    var event = callArgs[1];
+        .send({
+          "value": "json"
+        })
+        .expect('{\n  "value": "json"\n}', function () {
+          var callArgs, event;
+          callArgs = testRequest.called ? testRequest.getCall(0).args : null;
+          if (!callArgs) {
+            should.Throw("No request was ever made to Keen.IO");  
+          }
+          event = callArgs[1];
 
-                    event.should.have.property('intention');
-                    event.intention.body.should.eql({});
-                    done();
-                  });
+          event.intention.body.should.eql({ "value": "json" });
+          done();
+        });
     });
 
-    it("should send a reaction to keen.io if application/json is specified as the response", function (done) {
+    it("should send a reaction to Keen.IO if application/x-www-form-urlencoded is specified as the response", function (done) {
       app.get('/test', keenioMiddleware.trackRoute(), function (req, res) {
         var requestBody = req.body;
         res.send(requestBody);
-      });
+      });      
 
-      var makeRequest = sinon.spy();
-      keenioMiddleware.keenClient.addEvent = makeRequest;
+      var testRequest = sinon.spy();
+      keenioMiddleware.keenClient.addEvent = testRequest;
 
       request(app).get('/test')
-        .send({
-          "user": "seb"
-        })
-        .expect('{\n  "user": "seb"\n}', function () {
-          makeRequest.calledOnce.should.equal(true);
+        .type('form')
+        .send('value=urlencoded')
+        .expect('{\n  "value": "urlencoded"\n}', function () {
+          var callArgs, event;
+          callArgs = testRequest.called ? testRequest.getCall(0).args : null;
+          if (!callArgs) {
+            should.Throw("No request was ever made to Keen.IO");  
+          }
+          event = callArgs[1];
+
+          event.intention.body.should.eql({ "value": "urlencoded" });
           done();
         });
     });
