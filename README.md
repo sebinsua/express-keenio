@@ -53,7 +53,7 @@ Install it from the command line with:
 $ npm install express-keenio
 ```
 
-Setup
+Usage
 -----
 
 It's possible to use the middleware against specific routes decorator-style:
