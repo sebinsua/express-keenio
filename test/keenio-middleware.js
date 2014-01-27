@@ -126,7 +126,7 @@ describe("keenioMiddleware", function () {
 
       var handle = keenioMiddleware.trackRoute.bind(keenioMiddleware);
       handle.should.not.throw(Error, 'express-keenio middleware must be configured before use. Please call ' +
-                                     'keenioMiddleware.configure(options).');
+                                     'keenio-middleware#configure(options).');
     });
 
     it("should return a valid middleware if handleAll() is executed after valid configuration", function () {
@@ -152,19 +152,19 @@ describe("keenioMiddleware", function () {
 
       var handleAll = keenioMiddleware.handleAll.bind(keenioMiddleware);
       handleAll.should.not.throw(Error, 'express-keenio middleware must be configured before use. Please call ' +
-                                        'keenioMiddleware.configure(options).');
+                                        'keenio-middleware#configure(options).');
     });
 
     it("should error if handle() is executed before calling configure()", function () {
       var handle = keenioMiddleware.handle.bind(keenioMiddleware);
       handle.should.throw(Error, 'express-keenio middleware must be configured before use. Please call ' +
-                                 'keenioMiddleware.configure(options).');
+                                 'keenio-middleware#configure(options).');
     });
 
     it("should error if handleAll() is executed before calling configure()", function () {
       var handleAll = keenioMiddleware.handleAll.bind(keenioMiddleware);
       handleAll.should.throw(Error, 'express-keenio middleware must be configured before use. Please call ' +
-                                    'keenioMiddleware.configure(options).');
+                                    'keenio-middleware#configure(options).');
     });
 
   });
