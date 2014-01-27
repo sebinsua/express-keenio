@@ -12,13 +12,13 @@ describe("isExcludedRoute()", function () {
     },
     excludeRoutes: [{
       route: "/other-route",
-      method: "post"
+      method: "POST"
     }, {
       route: "/test",
-      method: "get"
+      method: "GET"
     }, {
       route: "/test",
-      method: "post"
+      method: "POST"
     }],
   };
   var routesHandler;
@@ -29,7 +29,7 @@ describe("isExcludedRoute()", function () {
   it("should return true if a route is in the excluded list", function () {
     var route = {
       path: "/test",
-      method: "get"
+      method: "GET"
     };
 
     routesHandler.isExcludedRoute(route).should.be.true;
@@ -38,7 +38,7 @@ describe("isExcludedRoute()", function () {
   it("should return false if a route is not in the excluded list", function () {
     var route = {
       path: "/test",
-      method: "options"
+      method: "OPTIONS"
     };
 
     routesHandler.isExcludedRoute(route).should.be.false;
@@ -53,14 +53,14 @@ describe("getRouteConfig()", function () {
     },
     routes: [{
       route: "/other-route",
-      method: "post"
+      method: "POST"
     }, {
       route: "/test",
-      method: "get",
+      method: "GET",
       eventCollectionName: "specialEventCollectionName"
     }, {
       route: "/test",
-      method: "post",
+      method: "POST",
       tag: "specialTag"
     }],
   };
@@ -72,7 +72,7 @@ describe("getRouteConfig()", function () {
   it("should just return undefined if there was nothing relevant in the configuration", function () {
     var route = {
       path: "/test",
-      method: "options"
+      method: "OPTIONS"
     };
 
     var metadata = routesHandler.getRouteConfig(route);
@@ -82,10 +82,10 @@ describe("getRouteConfig()", function () {
   it("should return valid data if the route matched with one that had metadata", function () {
     var metadata, route_a = {
         path: "/test",
-        method: "get"
+        method: "GET"
       }, route_b = {
         path: "/other-route",
-        method: "post"
+        method: "POST"
       };
 
     metadata = routesHandler.getRouteConfig(route_a);

@@ -180,7 +180,7 @@ describe("keenioMiddleware", function () {
         },
         excludeRoutes: [{
           route: '/disabled-insecure-route',
-          method: 'get'
+          method: 'GET'
         }]
       });
 
@@ -450,11 +450,11 @@ describe("keenioMiddleware", function () {
         },
         routes: [{
           route: '/params/:userId/:someParam/:someOtherParam',
-          method: 'post',
+          method: 'POST',
           eventCollectionName: "testEventCollectionName"
         }, {
           route: '/test',
-          method: 'get',
+          method: 'GET',
           tag: "testTagName"
         }]
       });
