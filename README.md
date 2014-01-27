@@ -144,7 +144,7 @@ If you are not using the decorator-style version of the middleware, and would li
     writeKey: '<test>'
   }
   excludeRoutes: [
-    { method: 'get', route: 'route-name' }
+    { method: 'GET', route: 'route-name' }
   ]
 }
 ```
@@ -158,8 +158,8 @@ If you are not using the decorator-style version of the middleware, and would li
     writeKey: '<test>'
   }
   routes: [
-    { method: 'get', route: 'route-name-1', eventCollectionName: '' },
-    { method: 'post', route: 'route-name-2', eventCollectionName: '' }
+    { method: 'GET', route: 'route-name-1', eventCollectionName: '' },
+    { method: 'POST', route: 'route-name-2', eventCollectionName: '' }
   ]
 }
 ```
