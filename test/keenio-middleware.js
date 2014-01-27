@@ -232,6 +232,7 @@ describe("keenioMiddleware", function () {
           eventCollection.should.equal("post-test");
           event.should.have.property('intention');
           event.intention.should.eql({
+            method: 'POST',
             path: '/test',
             query: {},
             body: {
@@ -268,6 +269,7 @@ describe("keenioMiddleware", function () {
           eventCollection.should.equal("post-params-userId-someParam-someOtherParam");
           event.should.have.property('intention');
           event.intention.should.eql({
+            method: 'POST',
             path: '/params/5/7/8',
             body: {
               user: "seb"
@@ -309,6 +311,7 @@ describe("keenioMiddleware", function () {
           eventCollection.should.equal("post-test");
           event.should.have.property('intention');
           event.intention.should.eql({
+            method: 'POST',
             path: '/test',
             query: {
               someArgument: '2',
@@ -608,6 +611,7 @@ describe("keenioMiddleware", function () {
           event.tag.should.equal("Posted to test");
           event.should.have.property('intention');
           event.intention.should.eql({
+            method: 'POST',
             path: '/test',
             query: {},
             body: {
@@ -650,6 +654,7 @@ describe("keenioMiddleware", function () {
           eventCollection.should.equal("post-params-userId-someParam-someOtherParam");
           event.should.have.property('intention');
           event.intention.should.eql({
+            method: 'POST',
             path: '/params/5/7/8',
             query: {},
             body: {
@@ -695,6 +700,7 @@ describe("keenioMiddleware", function () {
           eventCollection.should.equal("get-test");
           event.should.have.property('intention');
           event.intention.should.eql({
+            method: 'GET',
             path: '/test',
             query: {
               someArgument: '2',
