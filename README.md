@@ -23,9 +23,9 @@ For example, an event might look like this:
   },
   "intention": {
     "method": "POST",
-    "path": "/pay-user/5,
+    "path": "/pay-user/5",
     "params": {
-      "user_id": 5
+      "userId": 5
     },
     "body": {
       "price": 5.00
@@ -38,7 +38,7 @@ For example, an event might look like this:
     "userAddress": "..."
   },
   "httpStatus": 200,
-  "tag": "Payment was made to user."
+  "tag": "..."
   "environment": {
     "library": "express-keenio"
   }
