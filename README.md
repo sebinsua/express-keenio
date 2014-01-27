@@ -1,4 +1,4 @@
-express-keenio
+[express-keenio](http://sebinsua.github.io/express-keenio/)
 ==============
 
 [![Build Status](https://travis-ci.org/sebinsua/express-keenio.png)](https://travis-ci.org/sebinsua/express-keenio)
