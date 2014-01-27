@@ -5,6 +5,46 @@ express-keenio
 
 Install Keen.IO analytics support into your Node.JS [Express.js](https://github.com/visionmedia/express) app in mere seconds.
 
+Once installed it creates Keen.IO events from HTTP requests based on data intercepted from the calls `res.json()`, `res.jsonp()`, `res.send()`, `res.render()`, `res.redirect()`, `res.sendfile()` and `res.download()`.
+
+For example, an event might look like this:
+
+```json
+{
+  "identity": {
+    "user": {
+      "name": "Joe Bloggs",
+      "age": 17
+    },
+    "session": {
+      "id": "some-identifier"
+    },
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1700.77 Safari/537.36"
+  },
+  "intention": {
+    "method": "POST",
+    "path": "/pay-user/5,
+    "params": {
+      "user_id": 5
+    },
+    "body": {
+      "price": 5.00
+    },
+    "query": {},
+    "referer": 'http://keen.io/' 
+  },
+  "reaction": {
+    "success": true,
+    "userAddress": "..."
+  },
+  "httpStatus": 200,
+  "tag": "Payment was made to user."
+  "environment": {
+    "library": "express-keenio"
+  }
+}
+```
+
 Getting Started
 ---------------
 
@@ -75,6 +115,20 @@ See [KeenClient-Node#initialization](https://github.com/keenlabs/KeenClient-node
 }
 ```
 
+### Blacklist Properties
+
+
+
+```javascript
+{
+  client: {
+    projectId: '<test>',
+    writeKey: '<test>'
+  }
+  blacklistProperties: ['passwordHash', 'apiKey', 'authToken', 'userKey']
+}
+```
+
 ### Route Configuration
 
 If you are not using the decorator-style version of the middleware, and would like either more control over which event collections exist or the ability to disable specific event collections you may configure the middleware.
@@ -129,13 +183,6 @@ While not recommended it's possible to override some of the internal behaviours 
 }
 ```
 
-Tests
------
-```shell
-$ npm install --dev
-$ npm test
-```
-
 Premise
 -------
 * Events can be seen as an intention-reaction mapping.
@@ -143,8 +190,20 @@ Premise
 * We should capture almost everything (events, environment, user identity and metadata e.g. repeat visits.)
 * Installation should be fast.
 
-Contributors
-------------
+Support
+-------
+
+Feel free to submit issues and pull requests.
+
+### Tests
+
+```shell
+$ npm install --dev
+$ npm test
+```
+
+### Contributors
+
 * [Seb Insua](http://github.com/sebinsua)
 
 License
