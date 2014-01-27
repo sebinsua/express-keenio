@@ -14,6 +14,7 @@ For example, an event might look like this:
   "identity": {
     "user": {
       "name": "Joe Bloggs",
+      "email": "joe@example.com",
       "age": 17
     },
     "session": {
