@@ -124,7 +124,7 @@ By default we redact the values of any 'password' properties. If you wish you ca
   client: {
     projectId: '<test>',
     writeKey: '<test>'
-  }
+  },
   blacklistProperties: ['passwordHash', 'apiKey', 'authToken', 'userKey']
 }
 ```
@@ -142,7 +142,7 @@ If you are not using the decorator-style version of the middleware, and would li
   client: {
     projectId: '<test>',
     writeKey: '<test>'
-  }
+  },
   excludeRoutes: [
     { method: 'GET', route: 'route-name' }
   ]
@@ -173,7 +173,7 @@ While not recommended it's possible to override some of the internal behaviours 
   client: {
     projectId: '<test>',
     writeKey: '<test>'
-  }
+  },
   handlers: {
     generateIdentity: function (req) {},
     generateEventCollectionName: function (route) {},
