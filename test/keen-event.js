@@ -41,7 +41,7 @@ describe("_isValidProperty()", function () {
 describe("_sanitizeData()", function () {
   var keenEventHandler;
 
-  it("should wipe out the value inside a 'password' key, even inside hierarhcy", function () {
+  it("should wipe out the value inside a 'password' key, even inside hierarchy", function () {
     var inputData = {
       user: {
         password: 'abc123'
@@ -49,11 +49,14 @@ describe("_sanitizeData()", function () {
       otherProperty: 'def456'
     }, outputData = {
       user: {
-        password: '[redacted]'
+
       },
       otherProperty: 'def456'
     };
-    keenEventHandler = new KeenEventModule({}, new EventEmitter());
+    var ee = new EventEmitter();
+    ee.on('debug', console.warn);
+
+    keenEventHandler = new KeenEventModule({}, ee);
     keenEventHandler._sanitizeData(inputData).should.eql(outputData);
   });
 
@@ -62,8 +65,7 @@ describe("_sanitizeData()", function () {
       property: 'abc123',
       otherProperty: 'def456'
     }, outputData = {
-      property: 'abc123',
-      otherProperty: '[redacted]'
+      property: 'abc123'
     };
     keenEventHandler = new KeenEventModule({
       blacklistProperties: ['otherProperty']
