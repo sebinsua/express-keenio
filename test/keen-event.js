@@ -53,10 +53,7 @@ describe("_sanitizeData()", function () {
       },
       otherProperty: 'def456'
     };
-    var ee = new EventEmitter();
-    ee.on('debug', console.warn);
-
-    keenEventHandler = new KeenEventModule({}, ee);
+    keenEventHandler = new KeenEventModule({}, new EventEmitter());
     keenEventHandler._sanitizeData(inputData).should.eql(outputData);
   });
 
@@ -180,5 +177,146 @@ describe("_checkForFunctions()", function () {
     var obj = { a: 2, deep: { aFunction: function () {} } };
     var smitten = { a: 2, deep: {} };
     keenEventHandler._checkForFunctions(obj).should.eql(smitten);
+  });
+});
+
+describe("_checkForNonWhitelist()", function () {
+  var keenEventHandler;
+  beforeEach(function () {
+    keenEventHandler = new KeenEventModule({}, new EventEmitter());
+  });
+
+  it("should return the same object when given no whitelists", function () {
+    var obj = {
+      intention: {
+        query: {
+          a: 5
+        },
+        body: {
+          b: 6
+        }
+      },
+      reaction: {
+        c: 7
+      }
+    };
+    var output = {
+      intention: {
+        query: {
+          a: 5
+        },
+        body: {
+          b: 6
+        }
+      },
+      reaction: {
+        c: 7
+      }
+    };
+    keenEventHandler._checkForNonWhitelist(obj, {});
+    obj.should.eql(output);
+  });
+
+  it("should return a different object when given some whitelists", function () {
+    var obj = {
+      intention: {
+        query: {
+          a: 5
+        },
+        body: {
+          b: 6
+        }
+      },
+      reaction: {
+        c: 7
+      }
+    };
+    var output = {
+      intention: {
+        query: {
+          a: 5
+        },
+        body: {
+          b: 6
+        }
+      },
+      reaction: {
+        c: 7
+      }
+    };
+    keenEventHandler._checkForNonWhitelist(obj, { query: ['not-there'] });
+    obj.should.not.eql(output);
+  });
+});
+
+describe("_stripNonWhitelistedProperties()", function () {
+  var keenEventHandler;
+  beforeEach(function () {
+    keenEventHandler = new KeenEventModule({}, new EventEmitter());
+  });
+
+  it('should wipe out properties not in the whitelist, leaving those that are in the whitelist', function () {
+    var obj = {
+      a: 5,
+      keepThis: 'still here',
+      andThis: 'also still here',
+      z: 11
+    };
+    var output = {
+      keepThis: 'still here',
+      andThis: 'also still here'
+    };
+    keenEventHandler._stripNonWhitelistedProperties(obj, ['keepThis', 'andThis']);
+    obj.should.eql(output);
+  });
+});
+
+describe("_stripNonWhitelistedDeepProperties()", function () {
+  var keenEventHandler;
+  beforeEach(function () {
+    keenEventHandler = new KeenEventModule({}, new EventEmitter());
+  });
+
+  it('should wipe out deep properties not in the whitelist, leaving those that are in the whitelist', function () {
+    var obj = {
+      deep: {
+        property: {
+          isHere: 7,
+          andHere: 9,
+          removeMe: 11
+        }
+      },
+      arrOfStrings: ['goes'],
+      arrOfObjects: [
+        {
+          name: 'Keep This',
+          types: {}
+        },
+        {
+          name: 'And This 2',
+          types: {}
+        }
+      ],
+      keepMe: 23
+    };
+    var output = {
+      deep: {
+        property: {
+          isHere: 7,
+          andHere: 9
+        }
+      },
+      arrOfObjects: [
+        {
+          name: 'Keep This'
+        },
+        {
+          name: 'And This 2'
+        }
+      ],
+      keepMe: 23
+    };
+    keenEventHandler._stripNonWhitelistedDeepProperties(obj, ['deep.property.isHere', 'deep.property.andHere', 'arrOfObjects[].name', 'keepMe' ]);
+    obj.should.eql(output);
   });
 });

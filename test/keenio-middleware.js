@@ -120,7 +120,9 @@ describe("keenioMiddleware", function () {
           writeKey: '<test>'
         },
         handlers: {},
-        blacklistProperties: []
+        whitelistProperties: {},
+        blacklistProperties: [],
+        defaults: {}
       };
 
       var configure = keenioMiddleware.configure.bind(keenioMiddleware);
@@ -146,7 +148,9 @@ describe("keenioMiddleware", function () {
           writeKey: '<test>'
         },
         handlers: {},
-        blacklistProperties: []
+        whitelistProperties: {},
+        blacklistProperties: [],
+        defaults: {}
       };
 
       var configure = keenioMiddleware.configure.bind(keenioMiddleware);
