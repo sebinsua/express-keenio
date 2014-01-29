@@ -568,7 +568,7 @@ describe("keenioMiddleware", function () {
 
   });
 
-  describe("trackRoute(eventCollection, eventTag) - specific route", function () {
+  describe("trackRoute(eventCollection, whitelistProperties, eventTag) - specific route", function () {
     var app;
 
     beforeEach(function () {
@@ -590,7 +590,7 @@ describe("keenioMiddleware", function () {
     });
 
     it("should send valid event data to keen.io on making a json body request", function (done) {
-      app.post('/test', keenioMiddleware.trackRoute('eventCollectionName', "Posted to test"), function (req, res) {
+      app.post('/test', keenioMiddleware.trackRoute('eventCollectionName', {}, "Posted to test"), function (req, res) {
         var requestBody = req.body;
         res.send(requestBody);
       });
@@ -829,7 +829,7 @@ describe("keenioMiddleware", function () {
     });
 
     it("should allow you to tag the event with the second argument", function (done) {
-      app.post('/test', keenioMiddleware.trackRoute(null, "Event tag"), function (req, res) {
+      app.post('/test', keenioMiddleware.trackRoute(null, {}, "Event tag"), function (req, res) {
         var requestBody = req.body;
         res.send(requestBody);
       });
