@@ -3,7 +3,7 @@
 
 [![Build Status](https://travis-ci.org/sebinsua/express-keenio.png)](https://travis-ci.org/sebinsua/express-keenio)
 
-Install Keen.IO analytics support into your Node.JS [Express.js](https://github.com/visionmedia/express) app in mere seconds and instantly begin capturing data.
+Install [Keen.IO](http://keen.io) analytics support into your Node.JS [Express.js](https://github.com/visionmedia/express) app in mere seconds and instantly begin capturing data.
 
 Once installed it creates Keen.IO events from HTTP requests based on data intercepted from the calls `res.json()`, `res.jsonp()`, `res.send()`, `res.render()`, `res.redirect()`, `res.sendfile()` and `res.download()`.
 
@@ -115,6 +115,48 @@ See [KeenClient-Node#initialization](https://github.com/keenlabs/KeenClient-node
 }
 ```
 
+### Event Property Limitation
+
+Keen.IO has a set limit of 1000 on the number of event properties belonging to an Event Collection and after this it will drop all events and error.
+
+The middleware provides defaults which should ensure this doesn't happen, but I **STRONGLY** recommend switching to explicit whitelists as soon as you become reliant on the system and understand what's important for your analytics needs.
+
+### Whitelist Properties
+
+There are some default property whitelists in the form of `whitelistProperties.query`, `whitelistProperties.body`, `whitelistProperties.reaction`. Whitelists can also exist against each route definition or be passed into the second argument of the `keenio.trackRoute()` function.
+
+Example 1:
+
+```javascript
+{
+  client: {
+    projectId: '<test>',
+    writeKey: '<test>'
+  },
+  whitelistProperties: {
+    query: ['id', 'userId', 'name', 'type'],
+    body: [],
+    reaction: ['description']
+  }
+}
+```
+
+*An empty array means nothing is whitelisted while a missing whitelist key means no whitelist is applied.*
+
+Example 2:
+
+```javascript
+
+app.get('/test', keenio.trackRoute("testEventCollection", { query: ['id', 'userId', 'name', 'type'], body: [] }), function (req, res) {
+   // Your code goes here.
+});
+
+```
+
+*NOTE: `whitelistProperties.body` and `whitelistProperties.reaction` support whitelisting `deep.properties.like.this`.*
+
+By default this middleware provides a (hopefully) sane fallback in the form of eventually rigid schemas. First of all, by default we accept up to 50 properties in the `intention.query`, 100 properties in a `intention.body`, and 100 properties in a `reaction`. Additionally after a route receives 500 requests or exists for a week it stops accepting new event properties. Properties will be kept in the order of popularity.
+
 ### Blacklist Properties
 
 By default we redact the values of any 'password' properties. If you wish you can pass in a list of other properties you wish to blacklist as shown below:
@@ -158,7 +200,7 @@ If you are not using the decorator-style version of the middleware, and would li
     writeKey: '<test>'
   }
   routes: [
-    { method: 'GET', route: 'route-name-1', eventCollectionName: '' },
+    { method: 'GET', route: 'route-name-1', eventCollectionName: '', whitelistProperties: {} },
     { method: 'POST', route: 'route-name-2', eventCollectionName: '' }
   ]
 }
