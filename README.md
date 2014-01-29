@@ -159,7 +159,7 @@ By default this middleware provides a (hopefully) sane fallback in the form of e
 
 ### Blacklist Properties
 
-By default we redact the values of any 'password' properties. If you wish you can pass in a list of other properties you wish to blacklist as shown below:
+By default we delete any 'password' properties. If you wish you can pass in a list of other properties you wish to explicitly blacklist as shown below:
 
 ```javascript
 {
