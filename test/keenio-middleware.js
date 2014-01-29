@@ -122,7 +122,12 @@ describe("keenioMiddleware", function () {
         handlers: {},
         whitelistProperties: {},
         blacklistProperties: [],
-        defaults: {}
+        defaults: {
+          addons: {
+            ipToGeo: true,
+            userAgentParser: true
+          }
+        }
       };
 
       var configure = keenioMiddleware.configure.bind(keenioMiddleware);
@@ -150,7 +155,12 @@ describe("keenioMiddleware", function () {
         handlers: {},
         whitelistProperties: {},
         blacklistProperties: [],
-        defaults: {}
+        defaults: {
+          addons: {
+            ipToGeo: true,
+            userAgentParser: true
+          }
+        }
       };
 
       var configure = keenioMiddleware.configure.bind(keenioMiddleware);
