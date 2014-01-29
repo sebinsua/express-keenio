@@ -25,6 +25,11 @@ describe("keenioMiddleware", function () {
     });
   });
 
+  it('should inherit from EventEmitter', function (done) {
+    keenioMiddleware.on('foo', done);
+    keenioMiddleware.emit('foo');
+  });
+
   describe("configure()", function () {
 
     it("should error if invalid configuration was passed in", function () {
