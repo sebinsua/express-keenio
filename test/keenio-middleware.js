@@ -867,6 +867,25 @@ describe("keenioMiddleware", function () {
           done();
         });
     });
+
+  });
+
+  describe("isAcceptableStatusCode()", function () {
+    it('should not allow a 5xx status code', function () {
+      keenioMiddleware.isAcceptableStatusCode(500).should.be.false;
+    });
+    
+    it('should allow 401, 402, and 404 status codes', function () {
+      keenioMiddleware.isAcceptableStatusCode(401).should.be.true;
+      keenioMiddleware.isAcceptableStatusCode(402).should.be.true;
+      keenioMiddleware.isAcceptableStatusCode(404).should.be.true;
+    });
+
+    it('should not allow most other 4xx status code', function () {
+      keenioMiddleware.isAcceptableStatusCode(400).should.be.false;
+      keenioMiddleware.isAcceptableStatusCode(403).should.be.false;
+      keenioMiddleware.isAcceptableStatusCode(411).should.be.false;
+    });
   });
 
 });
