@@ -141,7 +141,9 @@ Example 1:
 }
 ```
 
-*An empty array means nothing is whitelisted while a missing whitelist key means no whitelist is applied.*
+*NOTE 1: An empty array means nothing is whitelisted while a missing whitelist key means no whitelist is applied.*
+
+*NOTE 2: `whitelistProperties.query` takes just a property name, while `whitelistProperties.body` and `whitelistProperties.reaction` can take deep property identifiers (e.g. 'deep.array[].name' or 'deep.property.value'.)*
 
 Example 2:
 
@@ -170,6 +172,8 @@ By default we delete any 'password' properties. If you wish you can pass in a li
   blacklistProperties: ['passwordHash', 'apiKey', 'authToken', 'userKey']
 }
 ```
+
+*NOTE: `blacklistProperties` takes a property name that can be found anywhere inside an object. This means that 'passwordHash' would delete properties like intention.query.passwordHash and reaction.passwordHash. It does not allow you to specify exact properties at a particular depth like `whitelistProperties.body` and `whitelistProperties.reaction` allow.*
 
 ### Route Configuration
 
