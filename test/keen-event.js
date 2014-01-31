@@ -83,6 +83,39 @@ describe("_sanitizeData()", function () {
     keenEventHandler = new KeenEventModule({}, new EventEmitter());
     keenEventHandler._sanitizeData(inputData).should.eql(outputData);
   });
+
+  it("should return the same object when given no arrays-of-objects", function () {
+    var obj = { a: 2, deeper: { b: 3, c: [1, 2, 3] } };
+    keenEventHandler._sanitizeData(obj).should.eql(obj);
+  });
+
+  it("should remove arrays-of-objects if they are found", function () {
+    var obj = { a: 2, deeper: { b: 3, c: [{ id: 1 }, { id: 2 }, { id: 3 }] } };
+    var smitten = { a: 2, deeper: { b: 3 } };
+    keenEventHandler._sanitizeData(obj).should.eql(smitten);
+  });
+
+  it("should return the same object when given no extremely long strings", function () {
+    var obj = { a: 2, aString: 'abc' };
+    keenEventHandler._sanitizeData(obj).should.eql(obj);
+  });
+
+  it("should remove extremely long strings from an object", function () {
+    var obj = { a: 2, aString: Array(1000).join("abc") };
+    var smitten = { a: 2 };
+    keenEventHandler._sanitizeData(obj).should.eql(smitten);
+  });
+
+  it("should return the same object when given no functions", function () {
+    var obj = { a: 2, notAFunction: 'hey' };
+    keenEventHandler._sanitizeData(obj).should.eql(obj);
+  });
+
+  it("should remove functions from an object", function () {
+    var obj = { a: 2, deep: { aFunction: function () {} } };
+    var smitten = { a: 2, deep: {} };
+    keenEventHandler._sanitizeData(obj).should.eql(smitten);
+  });
 });
 
 describe("_checkPropertyDepth()", function () {
@@ -119,64 +152,6 @@ describe("_checkPropertyDepth()", function () {
     keenEventHandler._checkPropertyDepth(smitten, true);
     smitten.should.not.eql(rigorMortis);
     // good boy! *pat pat*
-  });
-});
-
-describe("_checkForArraysOfObjects()", function () {
-  var keenEventHandler;
-  beforeEach(function () {
-    keenEventHandler = new KeenEventModule({}, new EventEmitter());
-  });
-
-  it("should return the same object when given no arrays-of-objects", function () {
-    var obj = { a: 2, deeper: { b: 3, c: [1, 2, 3] } };
-    keenEventHandler._checkForArraysOfObjects(obj).should.eql(obj);
-  });
-
-  it("should remove arrays-of-objects if they are found", function () {
-    var obj = { a: 2, deeper: { b: 3, c: [{ id: 1 }, { id: 2 }, { id: 3 }] } };
-    var smitten = { a: 2, deeper: { b: 3 } };
-    keenEventHandler._checkForArraysOfObjects(obj).should.eql(smitten);
-  });
-
-  xit("should execute an aggregation method on arrays-of-objects when found", function () {
-
-  });
-});
-
-describe("_checkForExtremelyLongStrings()", function () {
-  var keenEventHandler;
-  beforeEach(function () {
-    keenEventHandler = new KeenEventModule({}, new EventEmitter());
-  });
-
-  it("should return the same object when given no extremely long strings", function () {
-    var obj = { a: 2, aString: 'abc' };
-    keenEventHandler._checkForExtremelyLongStrings(obj).should.eql(obj);
-  });
-
-  it("should remove extremely long strings from an object", function () {
-    var obj = { a: 2, aString: Array(1000).join("abc") };
-    var smitten = { a: 2 };
-    keenEventHandler._checkForExtremelyLongStrings(obj).should.eql(smitten);
-  });
-});
-
-describe("_checkForFunctions()", function () {
-  var keenEventHandler;
-  beforeEach(function () {
-    keenEventHandler = new KeenEventModule({}, new EventEmitter());
-  });
-
-  it("should return the same object when given no functions", function () {
-    var obj = { a: 2, notAFunction: 'hey' };
-    keenEventHandler._checkForFunctions(obj).should.eql(obj);
-  });
-
-  it("should remove functions from an object", function () {
-    var obj = { a: 2, deep: { aFunction: function () {} } };
-    var smitten = { a: 2, deep: {} };
-    keenEventHandler._checkForFunctions(obj).should.eql(smitten);
   });
 });
 
