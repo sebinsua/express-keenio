@@ -154,9 +154,7 @@ app.get('/test', keenio.trackRoute("testEventCollection", { query: ['id', 'userI
 });
 ```
 
-*NOTE: `whitelistProperties.body` and `whitelistProperties.reaction` support whitelisting `deep.properties.like.this`.*
-
-**WIP BEHAVIOUR:** By default this middleware provides a (hopefully) sane fallback in the form of eventually rigid schemas. First of all, by default we accept up to 50 properties in the `intention.query`, 100 properties in a `intention.body`, and 100 properties in a `reaction`. Additionally after a route receives 500 requests or exists for a week it stops accepting new event properties. Properties will be kept in the order of popularity.
+By default this middleware provides a fallback in the form of eventually rigid schemas. Firstly, by default we accept up to 50 properties in the `intention.query`, 100 properties in a `intention.body`, and 100 properties in a `reaction`. Secondly, after a route receives 500 requests or exists for a week it stops accepting new event properties. Properties are kept in popularity order.
 
 ### Blacklist Properties
 
