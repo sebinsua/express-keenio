@@ -207,6 +207,10 @@ describe('RouteSchemas', function () {
 
     });
 
+    xdescribe('getWhitelistStrategy', function () {
+
+    });
+
   });
 
   describe('#_initRouteEventualSchemas', function () {
