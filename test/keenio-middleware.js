@@ -126,6 +126,23 @@ describe("keenioMiddleware", function () {
           addons: {
             ipToGeo: true,
             userAgentParser: true
+          },
+          eventualSchemas: {
+            query: {
+              MAX_PROPERTIES: 30,
+              NUMBER_OF_INSTANCES: 500,
+              NUMBER_OF_DAYS: 7
+            },
+            body: {
+              MAX_PROPERTIES: 80,
+              NUMBER_OF_INSTANCES: 500,
+              NUMBER_OF_DAYS: 7
+            },
+            reaction: {
+              MAX_PROPERTIES: 120,
+              NUMBER_OF_INSTANCES: 500,
+              NUMBER_OF_DAYS: 7
+            }
           }
         }
       };
@@ -159,6 +176,23 @@ describe("keenioMiddleware", function () {
           addons: {
             ipToGeo: true,
             userAgentParser: true
+          },
+          eventualSchemas: {
+            query: {
+              MAX_PROPERTIES: 30,
+              NUMBER_OF_INSTANCES: 500,
+              NUMBER_OF_DAYS: 7
+            },
+            body: {
+              MAX_PROPERTIES: 80,
+              NUMBER_OF_INSTANCES: 500,
+              NUMBER_OF_DAYS: 7
+            },
+            reaction: {
+              MAX_PROPERTIES: 120,
+              NUMBER_OF_INSTANCES: 500,
+              NUMBER_OF_DAYS: 7
+            }
           }
         }
       };

@@ -12,13 +12,13 @@ describe('RouteSchemas', function () {
 
     it("should generate a RouteSchemas object with the correct defaults", function () {
       var routeSchemas = new RouteSchemas();
-      routeSchemas.eventualSchemaOptions.should.eql({})
+      routeSchemas.options.should.eql({})
       routeSchemas.routes.should.eql({});
     });
 
     it("should generate a RouteSchemas object with options passed in", function () {
       var routeSchemas = new RouteSchemas({ a: 'word' });
-      routeSchemas.eventualSchemaOptions.should.eql({ a: 'word' });
+      routeSchemas.options.should.eql({ a: 'word' });
       routeSchemas.routes.should.eql({});
     });
 
@@ -197,7 +197,11 @@ describe('RouteSchemas', function () {
         ]
       };
 
-      var instantFreezeStrategyRouteSchemas = new RouteSchemas({ freezeStrategy: [function () { return this._instanceCount >= 2; }], getWhitelistStrategy: [function (ctx) { return true; }] });
+      var freezeStrategy = function () {
+        return [ function () { return this._instanceCount >= 2; } ];
+      };
+
+      var instantFreezeStrategyRouteSchemas = new RouteSchemas({ handlers: { freezeStrategy: freezeStrategy } });
       instantFreezeStrategyRouteSchemas.add({ method: 'GET', path: '/users/:userId' }, event);
       instantFreezeStrategyRouteSchemas.add({ method: 'GET', path: '/users/:userId' }, newEvent);
       instantFreezeStrategyRouteSchemas.getWhitelist({ method: 'GET', path: '/users/:userId' }).should.be.eql(whitelist);

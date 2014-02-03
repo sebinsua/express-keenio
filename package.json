@@ -18,7 +18,7 @@
   "dependencies"    : {
     "keen.io": "~0.0.3",
     "connect-friendwares": "0.0.2",
-    "eventual-schema": "0.0.1"
+    "eventual-schema": "0.0.3"
   },
   "devDependencies" : {
     "express": "~3.4.7",
