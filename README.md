@@ -119,7 +119,7 @@ See [KeenClient-Node#initialization](https://github.com/keenlabs/KeenClient-node
 
 Keen.IO has a set limit of 1000 on the number of event properties belonging to an Event Collection and after this it will drop all events and error.
 
-The middleware provides defaults which should ensure this doesn't happen, but I **STRONGLY** recommend switching to explicit whitelists as soon as you become reliant on the system and understand what's important for your analytics needs.
+I **STRONGLY** recommend switching to explicit whitelists once you are reliant on the analytics system.
 
 ### Whitelist Properties
 
@@ -170,7 +170,7 @@ By default we delete any 'password' properties. If you wish you can pass in a li
 }
 ```
 
-*NOTE: `blacklistProperties` takes a property name that can be found anywhere inside an object. This means that 'passwordHash' would delete properties like intention.query.passwordHash and reaction.passwordHash. It does not allow you to specify exact properties at a particular depth like `whitelistProperties.body` and `whitelistProperties.reaction` allow.*
+*NOTE: `blacklistProperties` takes a property name that can be found anywhere inside an object. This means that 'passwordHash' would delete properties like intention.query.passwordHash and reaction.passwordHash. It does not allow you to specify exact properties at a particular depth like `whitelistProperties.query`, `whitelistProperties.body` and `whitelistProperties.reaction` allow.*
 
 ### Route Configuration
 
