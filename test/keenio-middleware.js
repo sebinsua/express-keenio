@@ -123,6 +123,9 @@ describe("keenioMiddleware", function () {
         whitelistProperties: {},
         blacklistProperties: [],
         defaults: {
+          MAX_PROPERTY_HIERARCHY_DEPTH: 10,
+          MAX_STRING_LENGTH: 1000,
+          MAX_PROPERTY_QUANTITY: 300,
           addons: {
             ipToGeo: true,
             userAgentParser: true
@@ -173,6 +176,9 @@ describe("keenioMiddleware", function () {
         whitelistProperties: {},
         blacklistProperties: [],
         defaults: {
+          MAX_PROPERTY_HIERARCHY_DEPTH: 10,
+          MAX_STRING_LENGTH: 1000,
+          MAX_PROPERTY_QUANTITY: 300,
           addons: {
             ipToGeo: true,
             userAgentParser: true

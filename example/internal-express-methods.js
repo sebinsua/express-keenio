@@ -1,12 +1,10 @@
 var express = require("express"),
-    clientConfig = require("./config.json").client,
+    config = require("./config.json"),
     keenioMiddleware = require('../');
 
 var app = express();
 
-keenioMiddleware.configure({
-  client: clientConfig
-});
+keenioMiddleware.configure(config);
 app.use(keenioMiddleware);
 
 app.get('/alter-status', function (req, res) {

@@ -1,12 +1,10 @@
 var express = require("express"),
-    clientConfig = require("./config.json").client,
+    config = require("./config.json"),
     keenioMiddleware = require('../');
 
 var app = express();
 
-keenioMiddleware.configure({
-  client: clientConfig
-});
+keenioMiddleware.configure(config);
 app.use(express.json());
 app.use(express.cookieParser('S3CRE7'));
 app.use(express.session({ store: new express.session.MemoryStore, secret: 'S3CRE7', key: 'sid' }));

@@ -116,6 +116,32 @@ describe("_sanitizeData()", function () {
     var smitten = { a: 2, deep: {} };
     keenEventHandler._sanitizeData(obj).should.eql(smitten);
   });
+
+  it("should remove extra properties from objects with masses of properties", function () {
+    // A little bit nasty, but it's just a sanity check in case hundreds of properties are added at once...
+    var inputData = {
+      user: {
+        name: 'jim',
+        type: 'human'
+      },
+      abc: 'def456',
+      def: 'def456',
+      ghi: 'def456',
+      jkl: 'def456',
+      mno: 'def456',
+      pqr: 'def456',
+      stu: 'def456'
+    }, outputData = {
+      user: {
+        name: 'jim',
+        type: 'human'
+      },
+      abc: 'def456',
+      def: 'def456'
+    };
+    keenEventHandler = new KeenEventModule({ defaults: { MAX_PROPERTY_QUANTITY: 5 }}, new EventEmitter());
+    keenEventHandler._sanitizeData(inputData).should.eql(outputData);
+  });
 });
 
 describe("_checkPropertyDepth()", function () {

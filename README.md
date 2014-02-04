@@ -143,7 +143,7 @@ Example 1:
 
 *NOTE 1: An empty array means nothing is whitelisted while a missing whitelist key means no whitelist is applied.*
 
-*NOTE 2: `whitelistProperties.query` takes just a property name, while `whitelistProperties.body` and `whitelistProperties.reaction` can take deep property identifiers (e.g. 'deep.array[].name' or 'deep.property.value'.)*
+*NOTE 2: `whitelistProperties.query`, `whitelistProperties.body` and `whitelistProperties.reaction` can take deep property identifiers (e.g. 'deep.array[].name' or 'deep.property.value'.)*
 
 Example 2:
 
@@ -154,7 +154,7 @@ app.get('/test', keenio.trackRoute("testEventCollection", { query: ['id', 'userI
 });
 ```
 
-By default this middleware provides a fallback in the form of eventually rigid schemas. Firstly, by default we accept up to 50 properties in the `intention.query`, 100 properties in a `intention.body`, and 100 properties in a `reaction`. Secondly, after a route receives 500 requests or exists for a week it stops accepting new event properties. Properties are kept in popularity order.
+By default this middleware provides a fallback in the form of eventually rigid schemas. Firstly, by default we accept up to 30 properties in the `intention.query`, 80 properties in a `intention.body`, and 120 properties in a `reaction`. Secondly, after a route receives 500 requests or exists for a week it stops accepting new event properties.
 
 ### Blacklist Properties
 
