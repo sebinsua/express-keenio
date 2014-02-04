@@ -68,8 +68,14 @@ var app = express();
 keenio.configure({ client: { projectId: '<test>', writeKey: '<test>'} });
 keenio.on('error', console.warn); // There are 'error', 'info', 'track', and 'flush' events which are emitted.
 
-app.get('/test', keenio.trackRoute("testEventCollection"), function (req, res) {
-   // Your code goes here.
+app.get('/test', keenio.trackRoute('testCollection'), function (req, res) {
+  // You code goes here.
+})
+
+app.post('/payment', keenio.trackRoute("payments",
+                                      { query: ['userId', 'itemId', 'type', 'quantity', 'price'],
+                                        reaction: ['receipt.status', 'receipt.tax'] }), function (req, res) {
+  // Your code goes here.
 });
 
 app.listen(3000);
@@ -222,6 +228,45 @@ While not recommended it's possible to override some of the internal behaviours 
     generateEventCollectionName: function (route) {},
     parseRequestBody: function (body) {},
     parseResponseBody: function (body) {}
+  }
+}
+```
+
+### Defaults
+
+It's also possible to override some of the default values used by validators, route schemas, etc.
+
+```javascript
+{
+  client: {
+    projectId: '<test>',
+    writeKey: '<test>'
+  },
+  defaults: {
+    addons: {
+      ipToGeo: true,
+      userAgentParser: true
+    },
+    MAX_PROPERTY_HIERARCHY_DEPTH: 10,
+    MAX_STRING_LENGTH: 1000,
+    MAX_PROPERTY_QUANTITY: 300,
+    eventualSchemas: {
+      query: {
+        MAX_PROPERTIES: 30,
+        NUMBER_OF_INSTANCES: 500,
+        NUMBER_OF_DAYS: 7
+      },
+      body: {
+        MAX_PROPERTIES: 80,
+        NUMBER_OF_INSTANCES: 500,
+        NUMBER_OF_DAYS: 7
+      },
+      reaction: {
+        MAX_PROPERTIES: 120,
+        NUMBER_OF_INSTANCES: 500,
+        NUMBER_OF_DAYS: 7
+      }
+    }
   }
 }
 ```
