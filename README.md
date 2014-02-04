@@ -68,8 +68,14 @@ var app = express();
 keenio.configure({ client: { projectId: '<test>', writeKey: '<test>'} });
 keenio.on('error', console.warn); // There are 'error', 'info', 'track', and 'flush' events which are emitted.
 
-app.get('/test', keenio.trackRoute("testEventCollection"), function (req, res) {
-   // Your code goes here.
+app.get('/test', keenio.trackRoute('testCollection'), function (req, res) {
+  // You code goes here.
+})
+
+app.post('/payment', keenio.trackRoute("payments",
+                                      { query: ['userId', 'itemId', 'type', 'quantity', 'price'],
+                                        reaction: ['receipt.status', 'receipt.tax'] }), function (req, res) {
+  // Your code goes here.
 });
 
 app.listen(3000);
@@ -119,7 +125,7 @@ See [KeenClient-Node#initialization](https://github.com/keenlabs/KeenClient-node
 
 Keen.IO has a set limit of 1000 on the number of event properties belonging to an Event Collection and after this it will drop all events and error.
 
-The middleware provides defaults which should ensure this doesn't happen, but I **STRONGLY** recommend switching to explicit whitelists as soon as you become reliant on the system and understand what's important for your analytics needs.
+I **STRONGLY** recommend switching to explicit whitelists once you are reliant on the analytics system.
 
 ### Whitelist Properties
 
@@ -170,7 +176,7 @@ By default we delete any 'password' properties. If you wish you can pass in a li
 }
 ```
 
-*NOTE: `blacklistProperties` takes a property name that can be found anywhere inside an object. This means that 'passwordHash' would delete properties like intention.query.passwordHash and reaction.passwordHash. It does not allow you to specify exact properties at a particular depth like `whitelistProperties.body` and `whitelistProperties.reaction` allow.*
+*NOTE: `blacklistProperties` takes a property name that can be found anywhere inside an object. This means that 'passwordHash' would delete properties like intention.query.passwordHash and reaction.passwordHash. It does not allow you to specify exact properties at a particular depth like `whitelistProperties.query`, `whitelistProperties.body` and `whitelistProperties.reaction` allow.*
 
 ### Route Configuration
 
@@ -222,6 +228,45 @@ While not recommended it's possible to override some of the internal behaviours 
     generateEventCollectionName: function (route) {},
     parseRequestBody: function (body) {},
     parseResponseBody: function (body) {}
+  }
+}
+```
+
+### Defaults
+
+It's also possible to override some of the default values used by validators, route schemas, etc.
+
+```javascript
+{
+  client: {
+    projectId: '<test>',
+    writeKey: '<test>'
+  },
+  defaults: {
+    addons: {
+      ipToGeo: true,
+      userAgentParser: true
+    },
+    MAX_PROPERTY_HIERARCHY_DEPTH: 10,
+    MAX_STRING_LENGTH: 1000,
+    MAX_PROPERTY_QUANTITY: 300,
+    eventualSchemas: {
+      query: {
+        MAX_PROPERTIES: 30,
+        NUMBER_OF_INSTANCES: 500,
+        NUMBER_OF_DAYS: 7
+      },
+      body: {
+        MAX_PROPERTIES: 80,
+        NUMBER_OF_INSTANCES: 500,
+        NUMBER_OF_DAYS: 7
+      },
+      reaction: {
+        MAX_PROPERTIES: 120,
+        NUMBER_OF_INSTANCES: 500,
+        NUMBER_OF_DAYS: 7
+      }
+    }
   }
 }
 ```
