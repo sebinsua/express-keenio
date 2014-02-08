@@ -131,6 +131,8 @@ describe("keenioMiddleware", function () {
             userAgentParser: true
           },
           eventualSchemas: {
+            cache: true,
+            cachePath: './route-schemas.cache',
             query: {
               MAX_PROPERTIES: 30,
               NUMBER_OF_INSTANCES: 500,
@@ -184,6 +186,8 @@ describe("keenioMiddleware", function () {
             userAgentParser: true
           },
           eventualSchemas: {
+            cache: true,
+            cachePath: './route-schemas.cache',
             query: {
               MAX_PROPERTIES: 30,
               NUMBER_OF_INSTANCES: 500,
