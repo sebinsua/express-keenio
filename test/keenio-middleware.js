@@ -6,6 +6,9 @@ var express = require('express'),
     sinon = require('sinon'),
     proxyquire = require('proxyquire');
 
+var path = require('path'),
+    fs = require('fs');
+
 var mockKeenClientModule = {
 
   configure: function (options) {
@@ -20,6 +23,11 @@ describe("keenioMiddleware", function () {
 
   var keenioMiddleware;
   beforeEach(function () {
+    var cache = path.resolve('./route-schemas.cache');
+    if (fs.existsSync(cache)) {
+      fs.unlinkSync(cache);      
+    }
+
     keenioMiddleware = proxyquire('../lib/keenio-middleware', {
       "keen.io": mockKeenClientModule
     });
