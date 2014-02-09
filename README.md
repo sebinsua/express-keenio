@@ -7,7 +7,59 @@ Install [Keen.IO](http://keen.io) analytics support into your Node.JS [Express.j
 
 Once installed it creates Keen.IO events from HTTP requests based on data intercepted from the calls `res.json()`, `res.jsonp()`, `res.send()`, `res.render()`, `res.redirect()`, `res.sendfile()` and `res.download()`.
 
-For example, an event might look like this:
+Usage
+-----
+
+It's possible to use the middleware with specific routes decorator-style, like so:
+
+```javascript
+var express = require("express"),
+    keenio = require('express-keenio');
+
+var app = express();
+
+keenio.configure({ client: { projectId: '<test>', writeKey: '<test>'} });
+keenio.on('error', console.warn); // There are 'error', 'info', 'track', and 'flush' events which are emitted.
+
+app.get('/test', keenio.trackRoute('testCollection'), function (req, res) {
+  // You code goes here.
+});
+
+app.post('/payment', keenio.trackRoute("payments",
+                                      { query: ['userId', 'itemId', 'type', 'quantity', 'price'],
+                                        reaction: ['receipt.status', 'receipt.tax'] }), function (req, res) {
+  // Your code goes here.
+});
+
+app.listen(3000);
+```
+
+It's also possible to make the middleware handle all routes by `use`ing it against the `app`:
+
+```javascript
+var express = require("express"),
+    keenio = require('express-keenio');
+
+var app = express();
+
+keenio.configure({ client: { projectId: '<test>', writeKey: '<test>' } });
+app.configure(function () {
+   app.use(express.bodyParser());
+   app.use(keenio);
+   app.use(express.router);
+});
+
+app.get('/test', function (req, res) {
+   // Your code goes here.
+});
+
+app.listen(3000);
+```
+
+What will an event look like?
+-----------------------------
+
+The middleware will create something that looks sort of like this:
 
 ```json
 {
@@ -54,57 +106,6 @@ Install it from the command line with:
 $ npm install express-keenio
 ```
 
-Usage
------
-
-It's possible to use the middleware against specific routes decorator-style:
-
-```javascript
-var express = require("express"),
-    keenio = require('express-keenio');
-
-var app = express();
-
-keenio.configure({ client: { projectId: '<test>', writeKey: '<test>'} });
-keenio.on('error', console.warn); // There are 'error', 'info', 'track', and 'flush' events which are emitted.
-
-app.get('/test', keenio.trackRoute('testCollection'), function (req, res) {
-  // You code goes here.
-})
-
-app.post('/payment', keenio.trackRoute("payments",
-                                      { query: ['userId', 'itemId', 'type', 'quantity', 'price'],
-                                        reaction: ['receipt.status', 'receipt.tax'] }), function (req, res) {
-  // Your code goes here.
-});
-
-app.listen(3000);
-```
-
-Or it's possible to make the middleware handle all routes as shown below:
-
-```javascript
-var express = require("express"),
-    keenio = require('express-keenio');
-
-var app = express();
-
-keenio.configure({ client: { projectId: '<test>', writeKey: '<test>' } });
-app.configure(function () {
-   app.use(express.bodyParser());
-   app.use(keenio);
-   app.use(express.router);
-});
-
-app.get('/test', function (req, res) {
-   // Your code goes here.
-});
-
-app.listen(3000);
-```
-
-Easy!
-
 Configuration
 -------------
 
@@ -123,9 +124,11 @@ See [KeenClient-Node#initialization](https://github.com/keenlabs/KeenClient-node
 
 ### Event Property Limitation
 
-Keen.IO has a set limit of 1000 on the number of event properties belonging to an Event Collection and after this it will drop all events and error.
+Keen.IO has a set limit of 1000 on the number of event properties belonging to an Event Collection and after this it will begin to drop events.
 
-I **STRONGLY** recommend switching to explicit whitelists once you are reliant on the analytics system.
+Once you are reliant on analytics I **STRONGLY** recommend switching to explicit whitelists.
+
+However by default this middleware provides a fallback in the form of [eventually rigid schemas](https://github.com/sebinsua/eventual-schema). Firstly, by default we accept up to 30 properties in the `intention.query`, 80 properties in a `intention.body`, and 120 properties in a `reaction`. Secondly, after a route receives 500 requests or exists for a week it stops accepting new event properties. Once these properties are discovered we cache them in a file given by `options.defaults.eventualSchemas.cachePath` (normally, './route-schemas.cache') however this feature can be switched off by giving `options.defaults.eventualSchemas.cache` the value `false`.
 
 ### Whitelist Properties
 
@@ -147,7 +150,7 @@ Example 1:
 }
 ```
 
-*NOTE 1: An empty array means nothing is whitelisted while a missing whitelist key means no whitelist is applied.*
+*NOTE 1: An empty array means nothing is whitelisted while a missing whitelist key means no whitelist should be applied to the data.*
 
 *NOTE 2: `whitelistProperties.query`, `whitelistProperties.body` and `whitelistProperties.reaction` can take deep property identifiers (e.g. 'deep.array[].name' or 'deep.property.value'.)*
 
@@ -159,8 +162,6 @@ app.get('/test', keenio.trackRoute("testEventCollection", { query: ['id', 'userI
    // Your code goes here.
 });
 ```
-
-By default this middleware provides a fallback in the form of eventually rigid schemas. Firstly, by default we accept up to 30 properties in the `intention.query`, 80 properties in a `intention.body`, and 120 properties in a `reaction`. Secondly, after a route receives 500 requests or exists for a week it stops accepting new event properties.
 
 ### Blacklist Properties
 
@@ -176,11 +177,11 @@ By default we delete any 'password' properties. If you wish you can pass in a li
 }
 ```
 
-*NOTE: `blacklistProperties` takes a property name that can be found anywhere inside an object. This means that 'passwordHash' would delete properties like intention.query.passwordHash and reaction.passwordHash. It does not allow you to specify exact properties at a particular depth like `whitelistProperties.query`, `whitelistProperties.body` and `whitelistProperties.reaction` allow.*
+*NOTE: `blacklistProperties` takes a property name that can be found anywhere inside an object. This means that 'passwordHash' would delete properties like `intention.query.passwordHash` and `reaction.passwordHash`. It does not allow you to specify exact properties at a particular depth like `whitelistProperties.query`, `whitelistProperties.body` and `whitelistProperties.reaction` each allow.*
 
 ### Route Configuration
 
-If you are not using the decorator-style version of the middleware, and would like either more control over which event collections exist or the ability to disable specific event collections you may configure the middleware.
+If you are not using the decorator-style version of the middleware, and would like either (a) more control over which event collections exist or (b) the ability to disable specific event collections you may configure the routes upfront.
 
 *You must pick either 'routes' or 'excludeRoutes' but not both.*
 
@@ -213,25 +214,6 @@ If you are not using the decorator-style version of the middleware, and would li
 }
 ```
 
-### Middleware Overrides
-
-While not recommended it's possible to override some of the internal behaviours of the middleware like so:
-
-```javascript
-{
-  client: {
-    projectId: '<test>',
-    writeKey: '<test>'
-  },
-  handlers: {
-    generateIdentity: function (req) {},
-    generateEventCollectionName: function (route) {},
-    parseRequestBody: function (body) {},
-    parseResponseBody: function (body) {}
-  }
-}
-```
-
 ### Defaults
 
 It's also possible to override some of the default values used by validators, route schemas, etc.
@@ -251,6 +233,8 @@ It's also possible to override some of the default values used by validators, ro
     MAX_STRING_LENGTH: 1000,
     MAX_PROPERTY_QUANTITY: 300,
     eventualSchemas: {
+      cache: true,
+      cachePath: './route-schemas.cache',
       query: {
         MAX_PROPERTIES: 30,
         NUMBER_OF_INSTANCES: 500,
@@ -271,12 +255,24 @@ It's also possible to override some of the default values used by validators, ro
 }
 ```
 
-Premise
--------
-* Events can be seen as an intention-reaction mapping.
-* Events belong in a collection together when they can be described by similar properties.
-* We should capture almost everything (events, environment, user identity and metadata e.g. repeat visits.)
-* Installation should be fast.
+### Middleware Overrides
+
+While not recommended it's possible to override some of the internal behaviours of the middleware like so:
+
+```javascript
+{
+  client: {
+    projectId: '<test>',
+    writeKey: '<test>'
+  },
+  handlers: {
+    generateIdentity: function (req) {},
+    generateEventCollectionName: function (route) {},
+    parseRequestBody: function (body) {},
+    parseResponseBody: function (body) {}
+  }
+}
+```
 
 Support
 -------
