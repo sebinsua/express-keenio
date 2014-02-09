@@ -8,9 +8,9 @@ keenioMiddleware.configure(config);
 app.use(keenioMiddleware);
 
 app.get('/alter-status', function (req, res) {
-    res.status(201).json({
-        abc: "hey"
-    });
+  res.status(201).json({
+    abc: "hey"
+  });
 });
 
 app.get('/json-method', function (req, res) {

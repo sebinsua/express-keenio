@@ -117,6 +117,11 @@ describe("_sanitizeData()", function () {
     keenEventHandler._sanitizeData(obj).should.eql(smitten);
   });
 
+  it('should not remove array-of-objects that define keen addons', function () {
+    var obj = { a: 2, deeper: { b: 3, c: [1, 2, 3] }, addons: [{}, {}, {}] };
+    keenEventHandler._sanitizeData(obj).should.eql(obj);
+  });
+
   it("should remove extra properties from objects with masses of properties", function () {
     // A little bit nasty, but it's just a sanity check in case hundreds of properties are added at once...
     var inputData = {
