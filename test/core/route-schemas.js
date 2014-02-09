@@ -38,7 +38,7 @@ describe('RouteSchemas', function () {
 
     var routeSchemas;
     beforeEach(function () {
-      routeSchemas = new RouteSchemas();
+      routeSchemas = new RouteSchemas({ defaults: { eventualSchemas: { cache: false } } });
     });
 
     it("should be able to take a route which has not been used before and will then execute the method #_initRouteEventualSchemas", function () {
@@ -119,7 +119,7 @@ describe('RouteSchemas', function () {
     
     var routeSchemas;
     beforeEach(function () {
-      routeSchemas = new RouteSchemas();
+      routeSchemas = new RouteSchemas({ defaults: { eventualSchemas: { cache: false } } });
     });
 
     it("should be able to take a route which has not been used before and will then execute initRouteEventualSchema()", function () {
@@ -250,7 +250,7 @@ describe('RouteSchemas', function () {
 
     var routeSchemas;
     beforeEach(function () {
-      routeSchemas = new RouteSchemas();
+      routeSchemas = new RouteSchemas({ defaults: { eventualSchemas: { cache: false } } });
     });
 
     it('should flatten properties given a nested object', function () {
