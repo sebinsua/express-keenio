@@ -6,7 +6,17 @@ var RouteSchemas = require('../../lib/core/route-schemas'),
 var should = require('chai').should(),
     sinon = require('sinon');
 
+var path = require('path'),
+    fs = require('fs');
+
 describe('RouteSchemas', function () {
+
+  beforeEach(function () {
+    var cache = path.resolve('./route-schemas.cache');
+    if (fs.existsSync(cache)) {
+      fs.unlinkSync(cache);      
+    }
+  });
 
   describe('#construct', function () {
 
@@ -221,7 +231,7 @@ describe('RouteSchemas', function () {
 
     var routeSchemas;
     beforeEach(function () {
-      routeSchemas = new RouteSchemas();
+      routeSchemas = new RouteSchemas({ defaults: { eventualSchemas: { cache: false } } });
     });
 
     it("will setup a route's eventual schemas correctly", function () {
