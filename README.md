@@ -288,7 +288,7 @@ $ npm test
 
 ### Contributors
 
-* [Seb Insua](http://github.com/sebinsua)
+* [Seb Insua](http://github.com/sebinsua) - [@sebinsua](http://twitter.com/sebinsua)
 
 License
 -------
