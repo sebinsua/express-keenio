@@ -128,7 +128,7 @@ Keen.IO has a set limit of 1000 on the number of event properties belonging to a
 
 Once you are reliant on analytics I **STRONGLY** recommend switching to explicit whitelists.
 
-However by default this middleware provides a fallback in the form of [eventually rigid schemas](https://github.com/sebinsua/eventual-schema). Firstly, by default we accept up to 30 properties in the `intention.query`, 80 properties in a `intention.body`, and 120 properties in a `reaction`. Secondly, after a route receives 500 requests or exists for a week it stops accepting new event properties. Once these properties are discovered we cache them in a file given by `options.defaults.eventualSchemas.cachePath` (normally, './route-schemas.cache') however this feature can be switched off by giving `options.defaults.eventualSchemas.cache` the value `false`.
+However by default this middleware provides a fallback in the form of [eventually rigid schemas](https://github.com/sebinsua/eventual-schema). Firstly, by default we accept up to 30 properties in the `intention.query`, 80 properties in a `intention.body`, and 120 properties in a `reaction`. Secondly, after a route receives 500 requests or exists for a week it stops accepting new event properties. Once these properties are discovered we cache them in a file given by `options.defaults.eventualSchemas.cachePath` (normally, './route-schemas.cache') however this feature can be switched off by giving `options.defaults.eventualSchemas.cache` the value `false` or specifying a complete explicit whitelist against a route.
 
 ### Whitelist Properties
 

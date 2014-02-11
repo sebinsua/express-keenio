@@ -1,26 +1,26 @@
 {
-  "name"            : "express-keenio",
-  "description"     : "Express middleware for creating events from request-responses.",
-  "homepage"        : "https://github.com/sebinsua/express-keenio",
-  "keywords"        : [
+  "name": "express-keenio",
+  "description": "Express middleware for creating events from request-responses.",
+  "homepage": "https://github.com/sebinsua/express-keenio",
+  "keywords": [
     "middleware",
     "keen.io",
     "keenio",
     "analytics"
   ],
-  "author"          : "Seb Insua <me@sebinsua.com>",
-  "repository"      : {
+  "author": "Seb Insua <me@sebinsua.com>",
+  "repository": {
     "type": "git",
     "url": "git://github.com/sebinsua/express-keenio.git"
   },
-  "main"            : "./index.js",
-  "version"         : "0.2.2",
-  "dependencies"    : {
+  "main": "./index.js",
+  "version": "0.2.3",
+  "dependencies": {
     "keen.io": "~0.0.3",
     "connect-friendwares": "0.0.2",
     "eventual-schema": "0.1.1"
   },
-  "devDependencies" : {
+  "devDependencies": {
     "express": "~3.4.7",
     "supertest": "0.8.2",
     "proxyquire": "0.5.2",
