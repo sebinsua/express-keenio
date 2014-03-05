@@ -7,6 +7,16 @@ Install [Keen IO analytics](http://keen.io/signup) support into your Node.JS [Ex
 
 Once installed it creates Keen.IO events from HTTP requests based on data intercepted from the calls `res.json()`, `res.jsonp()`, `res.send()`, `res.render()`, `res.redirect()`, `res.sendfile()` and `res.download()`.
 
+Getting Started
+---------------
+
+**[Sign up to Keen IO for free here.](https://keen.io/signup)** And then install the package from the command line with:
+
+```shell
+$ npm install express-keenio
+```
+
+
 Usage
 -----
 
@@ -95,15 +105,6 @@ The middleware will create something that looks sort of like this:
     "library": "express-keenio"
   }
 }
-```
-
-Getting Started
----------------
-
-[Sign up to Keen IO here.](https://keen.io/signup) And then install the package from the command line with:
-
-```shell
-$ npm install express-keenio
 ```
 
 Configuration
