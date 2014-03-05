@@ -3,7 +3,7 @@
 
 [![Build Status](https://travis-ci.org/sebinsua/express-keenio.png)](https://travis-ci.org/sebinsua/express-keenio)
 
-[Install Keen IO](http://keen.io/signup) analytics support into your Node.JS [Express.js](https://github.com/visionmedia/express) app in mere seconds and instantly begin capturing data.
+[Install Keen IO analytics](http://keen.io/signup) support into your Node.JS [Express.js](https://github.com/visionmedia/express) app in mere seconds and instantly begin capturing data.
 
 Once installed it creates Keen.IO events from HTTP requests based on data intercepted from the calls `res.json()`, `res.jsonp()`, `res.send()`, `res.render()`, `res.redirect()`, `res.sendfile()` and `res.download()`.
 
