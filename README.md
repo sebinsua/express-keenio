@@ -100,7 +100,7 @@ The middleware will create something that looks sort of like this:
 Getting Started
 ---------------
 
-Install it from the command line with:
+[Sign up to Keen IO here.](https://keen.io/signup) And then install the package from the command line with:
 
 ```shell
 $ npm install express-keenio
