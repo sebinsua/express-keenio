@@ -7,6 +7,8 @@ Install [Keen IO analytics](http://keen.io/) support into your Node.JS [Express.
 
 Once installed it creates Keen.IO events from HTTP requests based on data intercepted from the calls `res.json()`, `res.jsonp()`, `res.send()`, `res.render()`, `res.redirect()`, `res.sendfile()` and `res.download()`.
 
+Read about [why the middleware was made and the use cases it solves here](https://keen.io/blog/78561215787/how-to-install-keen-io-analytics-into-your-node-js-app).
+
 Getting Started
 ---------------
 
