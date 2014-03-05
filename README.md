@@ -10,7 +10,7 @@ Once installed it creates Keen.IO events from HTTP requests based on data interc
 Getting Started
 ---------------
 
-**[Sign up to Keen IO for free here.](https://keen.io/signup)** And then install the package from the command line with:
+**[Sign up to Keen IO for free here](https://keen.io/signup)**. And then install the package from the command line with:
 
 ```shell
 $ npm install express-keenio
