@@ -229,8 +229,8 @@ It's also possible to override some of the default values used by validators, ro
   },
   defaults: {
     addons: {
-      ipToGeo: true,
-      userAgentParser: true
+      ipToGeo: false,
+      userAgentParser: false
     },
     MAX_PROPERTY_HIERARCHY_DEPTH: 10,
     MAX_STRING_LENGTH: 1000,
@@ -257,6 +257,11 @@ It's also possible to override some of the default values used by validators, ro
   }
 }
 ```
+
+### Data Enrichment Addons
+
+Keen IO supports two data enrichment addons: IP-to-GEO conversion and UserAgent parsing. If you would like to activate these addons for your project, just ask! The team is available in [HipChat](http://users.keen.io/), [IRC](http://webchat.freenode.net/?channels=keen-io), or at [contact@keen.io](mailto:contact@keen.io).
+
 
 ### Middleware Overrides
 

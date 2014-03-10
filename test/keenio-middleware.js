@@ -135,8 +135,8 @@ describe("keenioMiddleware", function () {
           MAX_STRING_LENGTH: 1000,
           MAX_PROPERTY_QUANTITY: 300,
           addons: {
-            ipToGeo: true,
-            userAgentParser: true
+            ipToGeo: false,
+            userAgentParser: false
           },
           eventualSchemas: {
             cache: true,
@@ -190,8 +190,8 @@ describe("keenioMiddleware", function () {
           MAX_STRING_LENGTH: 1000,
           MAX_PROPERTY_QUANTITY: 300,
           addons: {
-            ipToGeo: true,
-            userAgentParser: true
+            ipToGeo: false,
+            userAgentParser: false
           },
           eventualSchemas: {
             cache: true,
