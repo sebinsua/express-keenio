@@ -942,4 +942,55 @@ describe("keenioMiddleware", function () {
     });
   });
 
+  describe("When blacklisting HTTP referer", function () {
+  var app;
+
+    beforeEach(function () {
+      keenioMiddleware.configure({
+        client: {
+          projectId: "<fake-project-id>",
+          writeKey: "<fake-write-key>"
+        },
+        blacklistProperties: ['referer']
+      });
+
+      app = express();
+      app.configure(function () {
+        app.use(express.json());
+        app.use(express.urlencoded()); // note: these two replace: app.use(express.bodyParser());
+        // see:  http://stackoverflow.com/questions/19581146/how-to-get-rid-of-connect-3-0-deprecation-alert
+
+        app.use(app.router);
+      });
+    });
+
+    it("should remove the referer from the event that is created", function (done) {
+      app.post('/test', keenioMiddleware.trackRoute('eventCollectionName', {}, "Posted to test"), function (req, res) {
+        var requestBody = req.body;
+        res.send(requestBody);
+      });
+
+      var testRequest = sinon.spy();
+      keenioMiddleware.keenClient.addEvent = testRequest;
+
+      request(app).post('/test')
+        .send({
+          "user": "seb"
+        })
+        .set('Referer', 'http://www.google.co.uk')
+        .expect('{\n  "user": "seb"\n}', function () {
+          var callArgs = testRequest.called ? testRequest.getCall(0).args : null;
+          if (!callArgs) {
+            should.Throw("No request was ever made to Keen.IO");
+          }
+          var event = callArgs[1];
+
+          should.not.exist(event.intention.referer);
+
+          done();
+        });
+    });
+
+  });
+
 });
