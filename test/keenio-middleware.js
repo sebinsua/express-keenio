@@ -25,7 +25,7 @@ describe("keenioMiddleware", function () {
   beforeEach(function () {
     var cache = path.resolve('./route-schemas.cache');
     if (fs.existsSync(cache)) {
-      fs.unlinkSync(cache);      
+      fs.unlinkSync(cache);
     }
 
     keenioMiddleware = proxyquire('../lib/keenio-middleware', {
@@ -130,6 +130,7 @@ describe("keenioMiddleware", function () {
         handlers: {},
         whitelistProperties: {},
         blacklistProperties: [],
+        httpErrorsRecorded: false,
         defaults: {
           MAX_PROPERTY_HIERARCHY_DEPTH: 10,
           MAX_STRING_LENGTH: 1000,
@@ -185,6 +186,7 @@ describe("keenioMiddleware", function () {
         handlers: {},
         whitelistProperties: {},
         blacklistProperties: [],
+        httpErrorsRecorded: false,
         defaults: {
           MAX_PROPERTY_HIERARCHY_DEPTH: 10,
           MAX_STRING_LENGTH: 1000,
@@ -262,7 +264,7 @@ describe("keenioMiddleware", function () {
         app.use(express.multipart());
         // see:  http://stackoverflow.com/questions/19581146/how-to-get-rid-of-connect-3-0-deprecation-alert
         app.use(express.cookieParser('S3CRE7'));
-        app.use(express.session({ store: new express.session.MemoryStore, secret: 'S3CRE7', key: 'sid' }));        
+        app.use(express.session({ store: new express.session.MemoryStore, secret: 'S3CRE7', key: 'sid' }));
         app.use(keenioMiddleware);
         app.use(app.router);
       });
@@ -295,7 +297,7 @@ describe("keenioMiddleware", function () {
           var callArgs, eventCollection, event;
           callArgs = testRequest.called ? testRequest.getCall(0).args : null;
           if (!callArgs) {
-            should.Throw("No request was ever made to Keen.IO");  
+            should.Throw("No request was ever made to Keen.IO");
           }
           eventCollection = callArgs[0];
           event = callArgs[1];
@@ -332,7 +334,7 @@ describe("keenioMiddleware", function () {
           var callArgs, eventCollection, event;
           callArgs = testRequest.called ? testRequest.getCall(0).args : null;
           if (!callArgs) {
-            should.Throw("No request was ever made to Keen.IO");  
+            should.Throw("No request was ever made to Keen.IO");
           }
           eventCollection = callArgs[0];
           event = callArgs[1];
@@ -374,7 +376,7 @@ describe("keenioMiddleware", function () {
           var callArgs, eventCollection, event;
           callArgs = testRequest.called ? testRequest.getCall(0).args : null;
           if (!callArgs) {
-            should.Throw("No request was ever made to Keen.IO");  
+            should.Throw("No request was ever made to Keen.IO");
           }
           eventCollection = callArgs[0];
           event = callArgs[1];
@@ -414,7 +416,7 @@ describe("keenioMiddleware", function () {
         .expect('{\n  "user": "seb"\n}', function () {
           var callArgs = testRequest.called ? testRequest.getCall(0).args : null;
           if (!callArgs) {
-            should.Throw("No request was ever made to Keen.IO");  
+            should.Throw("No request was ever made to Keen.IO");
           }
           var event = callArgs[1];
 
@@ -437,7 +439,7 @@ describe("keenioMiddleware", function () {
           var callArgs, event;
           callArgs = testRequest.called ? testRequest.getCall(0).args : null;
           if (!callArgs) {
-            should.Throw("No request was ever made to Keen.IO");  
+            should.Throw("No request was ever made to Keen.IO");
           }
           event = callArgs[1];
 
@@ -457,7 +459,7 @@ describe("keenioMiddleware", function () {
           var callArgs, event;
           callArgs = testRequest.called ? testRequest.getCall(0).args : null;
           if (!callArgs) {
-            should.Throw("No request was ever made to Keen.IO");  
+            should.Throw("No request was ever made to Keen.IO");
           }
           event = callArgs[1];
 
@@ -478,7 +480,7 @@ describe("keenioMiddleware", function () {
           var callArgs, event;
           callArgs = testRequest.called ? testRequest.getCall(0).args : null;
           if (!callArgs) {
-            should.Throw("No request was ever made to Keen.IO");  
+            should.Throw("No request was ever made to Keen.IO");
           }
           event = callArgs[1];
 
@@ -579,7 +581,7 @@ describe("keenioMiddleware", function () {
           var callArgs, eventCollectionName;
           callArgs = testRequest.called ? testRequest.getCall(0).args : null;
           if (!callArgs) {
-            should.Throw("No request was ever made to Keen.IO");  
+            should.Throw("No request was ever made to Keen.IO");
           }
           eventCollectionName = callArgs[0];
 
@@ -600,7 +602,7 @@ describe("keenioMiddleware", function () {
           var callArgs, event;
           callArgs = testRequest.called ? testRequest.getCall(0).args : null;
           if (!callArgs) {
-            should.Throw("No request was ever made to Keen.IO");  
+            should.Throw("No request was ever made to Keen.IO");
           }
           event = callArgs[1];
 
@@ -621,7 +623,7 @@ describe("keenioMiddleware", function () {
           var callArgs, event;
           callArgs = testRequest.called ? testRequest.getCall(0).args : null;
           if (!callArgs) {
-            should.Throw("No request was ever made to Keen.IO");  
+            should.Throw("No request was ever made to Keen.IO");
           }
           event = callArgs[1];
 
@@ -673,7 +675,7 @@ describe("keenioMiddleware", function () {
           var callArgs, eventCollection, event;
           callArgs = testRequest.called ? testRequest.getCall(0).args : null;
           if (!callArgs) {
-            should.Throw("No request was ever made to Keen.IO");  
+            should.Throw("No request was ever made to Keen.IO");
           }
           eventCollection = callArgs[0];
           event = callArgs[1];
@@ -717,7 +719,7 @@ describe("keenioMiddleware", function () {
           var callArgs, eventCollection, event;
           callArgs = testRequest.called ? testRequest.getCall(0).args : null;
           if (!callArgs) {
-            should.Throw("No request was ever made to Keen.IO");  
+            should.Throw("No request was ever made to Keen.IO");
           }
           eventCollection = callArgs[0];
           event = callArgs[1];
@@ -763,7 +765,7 @@ describe("keenioMiddleware", function () {
           var callArgs, eventCollection, event;
           callArgs = testRequest.called ? testRequest.getCall(0).args : null;
           if (!callArgs) {
-            should.Throw("No request was ever made to Keen.IO");  
+            should.Throw("No request was ever made to Keen.IO");
           }
           eventCollection = callArgs[0];
           event = callArgs[1];
@@ -807,7 +809,7 @@ describe("keenioMiddleware", function () {
         .expect('{\n  "user": "seb"\n}', function () {
           var callArgs = testRequest.called ? testRequest.getCall(0).args : null;
           if (!callArgs) {
-            should.Throw("No request was ever made to Keen.IO");  
+            should.Throw("No request was ever made to Keen.IO");
           }
           var event = callArgs[1];
 
@@ -834,7 +836,7 @@ describe("keenioMiddleware", function () {
           var callArgs, event;
           callArgs = testRequest.called ? testRequest.getCall(0).args : null;
           if (!callArgs) {
-            should.Throw("No request was ever made to Keen.IO");  
+            should.Throw("No request was ever made to Keen.IO");
           }
           event = callArgs[1];
 
@@ -847,7 +849,7 @@ describe("keenioMiddleware", function () {
       app.get('/test', keenioMiddleware.trackRoute(), function (req, res) {
         var requestBody = req.body;
         res.send(requestBody);
-      });      
+      });
 
       var testRequest = sinon.spy();
       keenioMiddleware.keenClient.addEvent = testRequest;
@@ -859,7 +861,7 @@ describe("keenioMiddleware", function () {
           var callArgs, event;
           callArgs = testRequest.called ? testRequest.getCall(0).args : null;
           if (!callArgs) {
-            should.Throw("No request was ever made to Keen.IO");  
+            should.Throw("No request was ever made to Keen.IO");
           }
           event = callArgs[1];
 
@@ -884,7 +886,7 @@ describe("keenioMiddleware", function () {
         .expect('{\n  "user": "seb"\n}', function () {
           var callArgs = testRequest.called ? testRequest.getCall(0).args : null;
           if (!callArgs) {
-            should.Throw("No request was ever made to Keen.IO");  
+            should.Throw("No request was ever made to Keen.IO");
           }
           var eventCollection = callArgs[0];
 
@@ -910,7 +912,7 @@ describe("keenioMiddleware", function () {
         .expect('{\n  "user": "seb"\n}', function () {
           var callArgs = testRequest.called ? testRequest.getCall(0).args : null;
           if (!callArgs) {
-            should.Throw("No request was ever made to Keen.IO");  
+            should.Throw("No request was ever made to Keen.IO");
           }
           var event = callArgs[1];
 
@@ -926,7 +928,7 @@ describe("keenioMiddleware", function () {
     it('should not allow a 5xx status code', function () {
       keenioMiddleware.isAcceptableStatusCode(500).should.be.false;
     });
-    
+
     it('should allow 401, 402, and 404 status codes', function () {
       keenioMiddleware.isAcceptableStatusCode(401).should.be.true;
       keenioMiddleware.isAcceptableStatusCode(402).should.be.true;
