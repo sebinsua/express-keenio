@@ -270,7 +270,7 @@ describe("keenioMiddleware", function () {
       // see:  http://stackoverflow.com/questions/19581146/how-to-get-rid-of-connect-3-0-deprecation-alert
       app.use(cookieParser('S3CRE7'));
       app.use(session({ store: new session.MemoryStore, secret: 'S3CRE7', key: 'sid' }));
-      app.use(keenioMiddleware);
+      app.use(keenioMiddleware.handleAll());
 
       app.post('/test', function (req, res) {
         var requestBody = req.body;
@@ -298,6 +298,7 @@ describe("keenioMiddleware", function () {
         .expect('{\n  "user": "seb"\n}', function () {
 
           var callArgs, eventCollection, event;
+          console.log(testRequest.called);
           callArgs = testRequest.called ? testRequest.getCall(0).args : null;
           if (!callArgs) {
             should.Throw("No request was ever made to Keen.IO");
@@ -492,7 +493,7 @@ describe("keenioMiddleware", function () {
         });
     });
 
-    it("should ignore events that are explicity denied in the configuration", function (done) {
+    it("should ignore events that are explicitly denied in the configuration", function (done) {
       var testRequest = sinon.spy();
       keenioMiddleware.keenClient.addEvent = testRequest;
 
