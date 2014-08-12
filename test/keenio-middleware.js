@@ -6,6 +6,11 @@ var express = require('express'),
     sinon = require('sinon'),
     proxyquire = require('proxyquire');
 
+var bodyParser = require("body-parser"),
+    multipart = require("connect-multiparty"),
+    session = require("express-session"),
+    cookieParser = require("cookie-parser");
+
 var path = require('path'),
     fs = require('fs');
 
@@ -246,6 +251,7 @@ describe("keenioMiddleware", function () {
     var app;
 
     beforeEach(function () {
+      
       keenioMiddleware.configure({
         client: {
           projectId: "<fake-project-id>",
@@ -258,16 +264,13 @@ describe("keenioMiddleware", function () {
       });
 
       app = express();
-      app.configure(function () {
-        app.use(express.json());
-        app.use(express.urlencoded()); // note: these two replace: app.use(express.bodyParser());
-        app.use(express.multipart());
-        // see:  http://stackoverflow.com/questions/19581146/how-to-get-rid-of-connect-3-0-deprecation-alert
-        app.use(express.cookieParser('S3CRE7'));
-        app.use(express.session({ store: new express.session.MemoryStore, secret: 'S3CRE7', key: 'sid' }));
-        app.use(keenioMiddleware);
-        app.use(app.router);
-      });
+      app.use(bodyParser.json());
+      app.use(bodyParser.urlencoded()); // note: these two replace: app.use(express.bodyParser());
+      app.use(multipart());
+      // see:  http://stackoverflow.com/questions/19581146/how-to-get-rid-of-connect-3-0-deprecation-alert
+      app.use(cookieParser('S3CRE7'));
+      app.use(session({ store: new session.MemoryStore, secret: 'S3CRE7', key: 'sid' }));
+      app.use(keenioMiddleware);
 
       app.post('/test', function (req, res) {
         var requestBody = req.body;
@@ -533,13 +536,10 @@ describe("keenioMiddleware", function () {
       });
 
       app = express();
-      app.configure(function () {
-        app.use(express.json());
-        app.use(express.urlencoded()); // note: these two replace: app.use(express.bodyParser());
-        // see:  http://stackoverflow.com/questions/19581146/how-to-get-rid-of-connect-3-0-deprecation-alert
-        app.use(keenioMiddleware.handleAll());
-        app.use(app.router);
-      });
+      app.use(bodyParser.json());
+      app.use(bodyParser.urlencoded()); // note: these two replace: app.use(express.bodyParser());
+      // see:  http://stackoverflow.com/questions/19581146/how-to-get-rid-of-connect-3-0-deprecation-alert
+      app.use(keenioMiddleware.handleAll());
 
       app.get('/test', function (req, res) {
         var requestBody = req.body;
@@ -648,13 +648,10 @@ describe("keenioMiddleware", function () {
       });
 
       app = express();
-      app.configure(function () {
-        app.use(express.json());
-        app.use(express.urlencoded()); // note: these two replace: app.use(express.bodyParser());
-        // see:  http://stackoverflow.com/questions/19581146/how-to-get-rid-of-connect-3-0-deprecation-alert
+      app.use(bodyParser.json());
+      app.use(bodyParser.urlencoded()); // note: these two replace: app.use(express.bodyParser());
+      // see:  http://stackoverflow.com/questions/19581146/how-to-get-rid-of-connect-3-0-deprecation-alert
 
-        app.use(app.router);
-      });
     });
 
     it("should send valid event data to keen.io on making a json body request", function (done) {
@@ -943,7 +940,7 @@ describe("keenioMiddleware", function () {
   });
 
   describe("When blacklisting HTTP referer", function () {
-  var app;
+    var app;
 
     beforeEach(function () {
       keenioMiddleware.configure({
@@ -955,13 +952,10 @@ describe("keenioMiddleware", function () {
       });
 
       app = express();
-      app.configure(function () {
-        app.use(express.json());
-        app.use(express.urlencoded()); // note: these two replace: app.use(express.bodyParser());
-        // see:  http://stackoverflow.com/questions/19581146/how-to-get-rid-of-connect-3-0-deprecation-alert
+      app.use(bodyParser.json());
+      app.use(bodyParser.urlencoded()); // note: these two replace: app.use(express.bodyParser());
+      // see:  http://stackoverflow.com/questions/19581146/how-to-get-rid-of-connect-3-0-deprecation-alert
 
-        app.use(app.router);
-      });
     });
 
     it("should remove the referer from the event that is created", function (done) {
