@@ -14,14 +14,14 @@
     "url": "git://github.com/sebinsua/express-keenio.git"
   },
   "main": "./index.js",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "dependencies": {
     "keen.io": "~0.0.3",
-    "connect-friendwares": "0.0.2",
+    "connect-friendwares": "0.0.3",
     "eventual-schema": "0.1.1"
   },
   "devDependencies": {
-    "express": "~3.4.7",
+    "express": "~4.8.3",
     "supertest": "0.8.2",
     "proxyquire": "0.5.2",
     "mocha": "*",

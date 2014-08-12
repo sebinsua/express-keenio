@@ -9,6 +9,8 @@
   "author": "Seb Insua",
   "license": "BSD",
   "dependencies": {
-    "express": "*"
+    "express": "4.8.3",
+    "body-parser": "1.6.3",
+    "connect-multiparty": "1.2.1"
   }
 }

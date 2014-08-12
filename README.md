@@ -50,15 +50,15 @@ It's also possible to make the middleware handle all routes by `use`ing it again
 
 ```javascript
 var express = require("express"),
+    bodyParser = require("body-parser"),
     keenio = require('express-keenio');
 
 var app = express();
 
 keenio.configure({ client: { projectId: '<test>', writeKey: '<test>' } });
 app.configure(function () {
-   app.use(express.bodyParser());
-   app.use(keenio);
-   app.use(express.router);
+   app.use(bodyParser.json());
+   app.use(keenio.handleAll());
 });
 
 app.get('/test', function (req, res) {

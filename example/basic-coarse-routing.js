@@ -1,14 +1,16 @@
 var express = require("express"),
+	bodyParser = require("body-parser"),
+	multipart = require("connect-multiparty"),
     config = require("./config.json"),
     keenioMiddleware = require('../');
 
 var app = express();
 
 keenioMiddleware.configure(config);
-app.use(express.json());
-app.use(express.urlencoded());
-app.use(express.multipart());
-app.use(keenioMiddleware);
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
+app.use(multipart());
+app.use(keenioMiddleware.handleAll());
 
 app.get('/test', function (req, res) {
   res.json({
