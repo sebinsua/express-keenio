@@ -251,7 +251,7 @@ describe("keenioMiddleware", function () {
     var app;
 
     beforeEach(function () {
-      
+
       keenioMiddleware.configure({
         client: {
           projectId: "<fake-project-id>",
@@ -493,6 +493,7 @@ describe("keenioMiddleware", function () {
         });
     });
 
+    // @TODO: Fix this test.
     it("should ignore events that are explicitly denied in the configuration", function (done) {
       var testRequest = sinon.spy();
       keenioMiddleware.keenClient.addEvent = testRequest;
@@ -570,6 +571,7 @@ describe("keenioMiddleware", function () {
         });
     });
 
+    // @TODO: Fix this test.
     it("should allow you to set the eventCollectionName for a route from the configuration", function (done) {
       var testRequest = sinon.spy();
       keenioMiddleware.keenClient.addEvent = testRequest;
@@ -591,6 +593,7 @@ describe("keenioMiddleware", function () {
         });
     });
 
+    // @TODO: Fix this test.
     it("should allow you to tag the event for a route from the configuration", function (done) {
       var testRequest = sinon.spy();
       keenioMiddleware.keenClient.addEvent = testRequest;
@@ -612,6 +615,7 @@ describe("keenioMiddleware", function () {
         });
     });
 
+    // @TODO: Fix this test.
     it("should send specific identity data to keen.io if the configuration mandated this", function (done) {
       var testRequest = sinon.spy();
       keenioMiddleware.keenClient.addEvent = testRequest;

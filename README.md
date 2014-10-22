@@ -68,6 +68,8 @@ app.get('/test', function (req, res) {
 app.listen(3000);
 ```
 
+Additionally, the standard [Keen.IO Node.JS client](https://github.com/keenlabs/KeenClient-Node) is exposed on `middleware.keenClient`.
+
 What will an event look like?
 -----------------------------
 
@@ -96,7 +98,7 @@ The middleware will create something that looks sort of like this:
       "price": 5.00
     },
     "query": {},
-    "referer": "http://keen.io/" 
+    "referer": "http://keen.io/"
   },
   "reaction": {
     "success": true,
@@ -329,4 +331,3 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/sebinsua/express-keenio/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
