@@ -18,7 +18,9 @@ var mockKeenClientModule = {
 
   configure: function (options) {
     return {
-      addEvent: function (eventCollection, event, callback) {}
+      addEvent: function (eventCollection, event, callback) {
+        console.log("This should never be printed.");
+      }
     };
   }
 
@@ -274,7 +276,6 @@ describe("keenioMiddleware", function () {
 
       app.post('/test', function (req, res) {
         var requestBody = req.body;
-        // console.log(requestBody);
         res.send(requestBody);
       });
       app.post('/params/:userId/:someParam/:someOtherParam', function (req, res) {
@@ -298,7 +299,6 @@ describe("keenioMiddleware", function () {
         .expect('{\n  "user": "seb"\n}', function () {
 
           var callArgs, eventCollection, event;
-          console.log(testRequest.called);
           callArgs = testRequest.called ? testRequest.getCall(0).args : null;
           if (!callArgs) {
             should.Throw("No request was ever made to Keen.IO");
@@ -493,7 +493,6 @@ describe("keenioMiddleware", function () {
         });
     });
 
-    // @TODO: Fix this test.
     it("should ignore events that are explicitly denied in the configuration", function (done) {
       var testRequest = sinon.spy();
       keenioMiddleware.keenClient.addEvent = testRequest;
