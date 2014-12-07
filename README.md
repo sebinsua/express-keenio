@@ -279,6 +279,7 @@ While not recommended it's possible to override some of the internal behaviours 
     generateIdentity: function (req) {},
     generateEventCollectionName: function (route) {},
     parseRequestBody: function (body) {},
+    parseRequestObject: function (req) {},
     parseResponseBody: function (body) {}
   }
 }
