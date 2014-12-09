@@ -1,7 +1,7 @@
 [express-keenio](http://sebinsua.github.io/express-keenio/)
 ==============
 
-[![Build Status](https://travis-ci.org/sebinsua/express-keenio.png)](https://travis-ci.org/sebinsua/express-keenio) [![npm version](https://badge.fury.io/js/express-keenio.svg)](http://badge.fury.io/js/express-keenio)
+[![Build Status](https://travis-ci.org/sebinsua/express-keenio.png)](https://travis-ci.org/sebinsua/express-keenio) [![npm version](https://badge.fury.io/js/express-keenio.svg)](https://npmjs.org/package/express-keenio)
 
 Install [Keen IO analytics](http://keen.io/) support into your Node.JS [Express.js](https://github.com/visionmedia/express) app in mere seconds and instantly begin capturing data.
 
