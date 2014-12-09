@@ -1,7 +1,7 @@
 [express-keenio](http://sebinsua.github.io/express-keenio/)
 ==============
 
-[![Build Status](https://travis-ci.org/sebinsua/express-keenio.png)](https://travis-ci.org/sebinsua/express-keenio)
+[![Build Status](https://travis-ci.org/sebinsua/express-keenio.png)](https://travis-ci.org/sebinsua/express-keenio) [![npm version](https://badge.fury.io/js/express-keenio.svg)](http://badge.fury.io/js/express-keenio)
 
 Install [Keen IO analytics](http://keen.io/) support into your Node.JS [Express.js](https://github.com/visionmedia/express) app in mere seconds and instantly begin capturing data.
 
@@ -329,6 +329,3 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
 ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/sebinsua/express-keenio/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
