@@ -68,7 +68,7 @@ app.get('/test', function (req, res) {
 app.listen(3000);
 ```
 
-Additionally, the standard [Keen.IO Node.JS client](https://github.com/keenlabs/KeenClient-Node) is exposed on `middleware.keenClient`.
+Additionally, the standard [Keen.IO Node.JS client](https://github.com/keen/keen-js) is exposed on `middleware.keenClient`.
 
 What will an event look like?
 -----------------------------
