@@ -36,13 +36,17 @@ describe("keenioMiddleware", function () {
     }
 
     keenioMiddleware = proxyquire('../lib/keenio-middleware', {
-      "keen.io": mockKeenClientModule
+      "keen-js": function Keen() {
+        return mockKeenClientModule;
+      }
     });
   });
 
   it('should inherit from EventEmitter', function (done) {
-    keenioMiddleware.on('foo', done);
-    keenioMiddleware.emit('foo');
+    keenioMiddleware.on('foo', function (word) {
+      done();
+    });
+    keenioMiddleware.emit('foo', 'word!');
   });
 
   describe("configure()", function () {
@@ -811,7 +815,9 @@ describe("keenioMiddleware", function () {
           }
           var event = callArgs[1];
 
-          event.identity.should.eql({});
+          event.identity.should.eql({
+            ipAddress: "::ffff:127.0.0.1"
+          });
 
           done();
         });
