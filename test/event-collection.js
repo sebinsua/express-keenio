@@ -56,14 +56,14 @@ describe("generateName()", function () {
     var route = {
       path: '/test-a-very-long/path-name/that-goes-on-forever',
       methods: {
-        GET: true,
-        POST: true,
-        HEAD: true,
-        OPTIONS: true
+        get: true,
+        post: false,
+        head: false,
+        options: false
       }
     };
 
     var name = eventCollectionHandler.generateName(route);
-    name.length.should.be.below(64);
+    name.length.should.be.at.most(64);
   });
 })
