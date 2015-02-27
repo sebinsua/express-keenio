@@ -816,7 +816,6 @@ describe("keenioMiddleware", function () {
           var event = callArgs[1];
 
           event.identity.should.eql({
-            ipAddress: "::ffff:127.0.0.1"
           });
 
           done();
