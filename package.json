@@ -14,7 +14,7 @@
     "url": "git://github.com/sebinsua/express-keenio.git"
   },
   "main": "./index.js",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "dependencies": {
     "connect-friendwares": "0.0.3",
     "eventual-schema": "0.1.1",
