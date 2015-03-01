@@ -31,7 +31,7 @@ var express = require("express"),
 var app = express();
 
 keenio.configure({ client: { projectId: '<test>', writeKey: '<test>'} });
-keenio.on('error', console.warn); // There are 'error', 'info', 'track', and 'flush' events which are emitted.
+keenio.on('error', console.warn); // There are 'error', 'info', 'warning', 'debug', 'track', and 'flush' events which are emitted.
 
 app.get('/test', keenio.trackRoute('testCollection'), function (req, res) {
   // You code goes here.
