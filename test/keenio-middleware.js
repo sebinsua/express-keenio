@@ -814,7 +814,8 @@ describe("keenioMiddleware", function () {
             should.Throw("No request was ever made to Keen.IO");
           }
           var event = callArgs[1];
-
+            
+          delete event.identity.ipAddress;
           event.identity.should.eql({
           });
 
