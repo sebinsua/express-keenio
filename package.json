@@ -36,7 +36,7 @@
     "connect-multiparty": "^2.0.0"
   },
   "engines": {
-    "node": "*"
+    "node": "^6"
   },
   "scripts": {
     "test": "make test"
